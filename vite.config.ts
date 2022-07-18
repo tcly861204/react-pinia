@@ -20,8 +20,8 @@ export default defineConfig({
       // 入口
       entry: path.resolve(entryDir, 'main.tsx'),
       // 组件库名字
-      name: 'ministore',
-      fileName: 'ministore',
+      name: 'react-pinia',
+      fileName: 'react-pinia',
       // 输出格式
       formats: ['es', 'umd']
     },

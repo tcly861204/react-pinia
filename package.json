@@ -1,8 +1,8 @@
 {
-  "name": "ministore",
+  "name": "react-pinia",
   "version": "1.0.0",
   "description": "构建极简状态管理",
-  "main": "lib/ministore.umd.js",
+  "main": "lib/react-pinia.umd.js",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
