@@ -1,10 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 const path = require('path')
-
 const entryDir = path.resolve(__dirname, 'src');
 const outDir = path.resolve(__dirname, 'lib');
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   build: {

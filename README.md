@@ -1,2 +1,2 @@
-# ministore
-构建react状态管理
+# react-pinia
+构建react极简状态管理

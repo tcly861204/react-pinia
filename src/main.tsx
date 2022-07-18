@@ -46,7 +46,7 @@ function observer<T extends Record<string, any>>(storeKey: string, initialVal: T
   return proxy;
 }
 
-export const Provider = ({ store, children }: {store: Record<string, Record<string, any>>; children: JSX.Element}) => {
+export const Provider = ({ store, children }: {store: Record<string, Record<string, any>>; children?: React.ReactNode}) => {
   const update = useUpdate()
   const stateRef = useRef(store)
   const state = useCreation(() => {
