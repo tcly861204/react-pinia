@@ -1,8 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 const path = require('path')
-const entryDir = path.resolve(__dirname, 'src');
-const outDir = path.resolve(__dirname, 'lib');
+const entryDir = path.resolve(__dirname, 'packages')
+const outDir = path.resolve(__dirname, 'lib')
 export default defineConfig({
   plugins: [react()],
   build: {
@@ -10,9 +10,9 @@ export default defineConfig({
       external: ['react'],
       output: {
         globals: {
-          react: 'React'
-        }
-      }
+          react: 'React',
+        },
+      },
     },
     lib: {
       // 入口
@@ -21,8 +21,8 @@ export default defineConfig({
       name: 'react-pinia',
       fileName: 'react-pinia',
       // 输出格式
-      formats: ['umd']
+      formats: ['umd'],
     },
-    outDir
-  }
+    outDir,
+  },
 })

@@ -9,3 +9,4 @@ tsconfig.node.json
 build
 vite.config.ts
 index.html
+package
