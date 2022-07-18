@@ -3,6 +3,6 @@ declare module "react-pinia" {
     store: Record<string, Record<string, any>>;
     children: React.ReactNode
   }
-  export function Provider(props: ProviderProps): React.ReactNode;
+  export function Provider(props: ProviderProps): JSX.Element;
   export function createStore(key: string): Record<string, Record<string, any>>;
 }
