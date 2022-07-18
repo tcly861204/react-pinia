@@ -61,3 +61,40 @@ export default () => {
   )
 }
 ```
+
+## 局部状态
+
+```js
+import { defineStore } from 'react-pinia'
+
+// 定义局部状态
+const useStore = defineStore('count', {
+  state: () => {
+    return {
+      count: 0,
+    }
+  },
+})
+
+const Child = () => {
+  const store = useStore()
+  return <section>{store.count}</section>
+}
+
+const App = () => {
+  const store = useStore()
+  return (
+    <section>
+      <p>count: {store.count}</p>
+      <button
+        onClick={() => {
+          store.count += 1
+        }}
+      >
+        add
+      </button>
+      <Child />
+    </section>
+  )
+}
+```
