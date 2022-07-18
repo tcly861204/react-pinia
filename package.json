@@ -1,0 +1,27 @@
+{
+  "name": "ministore",
+  "version": "1.0.0",
+  "description": "构建极简状态管理",
+  "main": "main",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tcly861204/ministore.git"
+  },
+  "keywords": [
+    "react",
+    "store",
+    "state"
+  ],
+  "author": {
+    "name": "tcly861204",
+    "email": "tcly861204@hotmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tcly861204/ministore/issues"
+  },
+  "homepage": "https://github.com/tcly861204/ministore#readme"
+}

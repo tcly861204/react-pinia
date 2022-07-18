@@ -1,0 +1,29 @@
+name: Node.js Package
+
+on:
+  push:
+    tags:
+      - 'v*' # Push events to matching v*
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install
+        run: npm install # 安装依赖
+
+      - name: Build
+        run: npm run build # 打包
+
+      - name: Setup Node.js v16.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '16.x'
+          registry-url: https://registry.npmjs.org/
+
+      - name: publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{secrets.npm_token}}
