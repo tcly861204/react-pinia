@@ -36,16 +36,28 @@ const Child2 = memo(() => {
 
 const App = () => {
   const { user } = createStore('user')
+  console.log(user)
   return (
     <section>
       <p>hello app</p>
-      <p>username: {user.username}</p>
+      <p>name: {user.name}</p>
       <input
-        value={user.username}
+        value={user.name}
         onChange={(e) => {
-          user.username = e.target.value
+          user.name = e.target.value
+        }}
+        onKeyDown={(e) => {
+          if (e.code === 'Enter') {
+            user.list.push({
+              id: Math.random(),
+              name: user.name,
+            })
+          }
         }}
       />
+      {user.list.map((item: { id: number; name: string }) => {
+        return <li key={item.id}>{item.name}</li>
+      })}
       <Child />
       <Child2 />
     </section>

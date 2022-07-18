@@ -1,6 +1,6 @@
 export default {
   user: {
-    username: '',
-    password: '',
+    name: '',
+    list: [],
   },
 }

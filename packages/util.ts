@@ -35,7 +35,9 @@ export function observer<T extends Record<string, any>>(
   const proxy = new Proxy<T>(initialVal, {
     get(target, key, receiver) {
       const res = Reflect.get(target, key, receiver)
-      return typeOf(res) === 'object' ? observer(storeKey, res, cb) : Reflect.get(target, key)
+      return typeOf(res) === 'object' || typeOf(res) === 'array'
+        ? observer(storeKey, res, cb)
+        : Reflect.get(target, key)
     },
     set(target, key, val) {
       const ret = Reflect.set(target, key, val)

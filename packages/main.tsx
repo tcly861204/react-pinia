@@ -57,9 +57,6 @@ export const defineStore = (
   id: string,
   options: Record<'state', any>
 ): (() => Record<string, any>) => {
-  if (id in _storeCache) {
-    console.log('数据唯一id已被注册, 数据将被覆盖')
-  }
   const callback = () => {
     bus.emit('local', id)
   }

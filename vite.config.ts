@@ -5,6 +5,10 @@ const entryDir = path.resolve(__dirname, 'packages')
 const outDir = path.resolve(__dirname, 'lib')
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
   build: {
     rollupOptions: {
       external: ['react'],
