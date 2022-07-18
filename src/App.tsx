@@ -36,7 +36,7 @@ const Child2 = memo(() => {
 
 const App = () => {
   const { user } = createStore('user')
-  console.log(user)
+  console.log('rending')
   return (
     <section>
       <p>hello app</p>
@@ -52,6 +52,7 @@ const App = () => {
               id: Math.random(),
               name: user.name,
             })
+            user.name = ''
           }
         }}
       />

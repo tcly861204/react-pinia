@@ -1,4 +1,4 @@
-declare module 'react-pinia' {
+declare module 'mini-quick-store' {
   interface ProviderProps {
     store: Record<string, Record<string, any>>
     children: React.ReactNode
