@@ -3,11 +3,12 @@ import useStore from './useStore'
 import Child from './Child'
 
 const Child2 = memo(() => {
-  const store = useStore()
-  console.log('rendering Child2')
+  const store = useStore('user')
+  console.log('rending app')
   return (
     <section>
-      <p>{store.count}</p>
+      <p>{store.user}</p>
+      <button onClick={() => (store.user = 'avc')}>修改</button>
     </section>
   )
 })

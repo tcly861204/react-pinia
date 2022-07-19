@@ -1,6 +1,6 @@
 import { useCreation, useUpdate } from 'ahooks'
 import { useEffect, useRef, createContext, useContext } from 'react'
-import { typeOf, observer } from './util'
+import { typeOf, observer, checkUpdate } from './util'
 import bus from './bus'
 const Context = createContext({})
 const _storeCache: Record<string, any> = {}
@@ -35,12 +35,7 @@ export const createStore = (
   useEffect(() => {
     if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
       const _update = (key: unknown) => {
-        if (
-          (typeOf(storeKey) === 'string' && storeKey === key) ||
-          (typeOf(storeKey) === 'array' && storeKey.includes(key as string))
-        ) {
-          update()
-        }
+        checkUpdate(storeKey, key as string, update)
       }
       bus.on('update', _update)
     } else {
@@ -60,14 +55,16 @@ export const defineStore = (
     actions?: Record<string, any>
     getters?: Record<string, any>
   }
-): (() => Record<string, any>) => {
+): ((storeKey?: string | Array<string>) => Record<string, any>) => {
   const state = JSON.parse(JSON.stringify(options.state()))
+  let otherKeys: string[] = []
   const __store = observer(null, Object.assign({}, options.state()), callback)
   function callback(_id: string) {
     bus.emit('local', _id)
   }
   _storeCache[id] = __store
   if (options.actions) {
+    otherKeys = otherKeys.concat(Object.keys(options.actions))
     try {
       Object.keys(options.actions).map((key) => {
         _storeCache[id][key] = options.actions && options.actions[key].bind(__store)
@@ -75,18 +72,19 @@ export const defineStore = (
     } catch (_) {}
   }
   if (options.getters) {
+    otherKeys = otherKeys.concat(Object.keys(options.getters))
     try {
       Object.keys(options.getters).map((key) => {
         __store[key] = options.getters && options.getters[key](state)
       })
     } catch (_) {}
   }
-  return () => {
+  return (storeKey?: string | Array<string>) => {
     const update = useUpdate()
     const store = __store
     useEffect(() => {
-      bus.on('local', (storeKey) => {
-        if ((storeKey as string) in state) {
+      bus.on('local', (_storeKey) => {
+        if (!otherKeys.includes(_storeKey as string)) {
           if (options.getters) {
             try {
               Object.keys(options.getters).map((key) => {
@@ -95,7 +93,11 @@ export const defineStore = (
               })
             } catch (_) {}
           }
-          update()
+          if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
+            checkUpdate(storeKey, _storeKey as string, update)
+          } else {
+            update()
+          }
         }
       })
       return () => {

@@ -4,15 +4,17 @@ const useStore = defineStore('app', {
   state: () => {
     return {
       count: 1,
+      user: 'hello',
     }
   },
   getters: {
-    dobCount: (state: Record<string, any>) => {
+    doubleCount: (state: Record<string, any>) => {
       return state.count * 2
     },
   },
   actions: {
     add() {
+      console.log(this)
       this.count += 1
     },
   },
