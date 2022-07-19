@@ -21,7 +21,7 @@ export const typeOf = (value: unknown) => {
 }
 
 export function observer<T extends Record<string, any>>(
-  storeKey: string,
+  storeKey: string | null,
   initialVal: T,
   cb: (K: string) => void
 ): T {
@@ -40,13 +40,16 @@ export function observer<T extends Record<string, any>>(
         : Reflect.get(target, key)
     },
     set(target, key, val) {
+      if (target[key as string] === val) {
+        return Reflect.get(target, key)
+      }
       const ret = Reflect.set(target, key, val)
-      cb(storeKey)
+      cb(storeKey || (key as string))
       return ret
     },
     deleteProperty(target, key) {
       const ret = Reflect.deleteProperty(target, key)
-      cb(storeKey)
+      cb(storeKey || (key as string))
       return ret
     },
   })

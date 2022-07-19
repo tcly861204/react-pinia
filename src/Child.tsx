@@ -1,11 +1,14 @@
-import useStore, { add } from './useStore'
+import useStore from './useStore'
 import { memo } from 'react'
 const Child = memo(() => {
   const store = useStore()
+  console.log('rendering')
+  console.log(store)
   return (
     <section>
       <p>{store.count}</p>
-      <button onClick={() => add(store)}>添加</button>
+      <p>{store.dobCount}</p>
+      <button onClick={store.add}>添加</button>
     </section>
   )
 })

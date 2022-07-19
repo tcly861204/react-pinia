@@ -55,17 +55,49 @@ export const createStore = (
 
 export const defineStore = (
   id: string,
-  options: Record<'state' | 'actions', any>
-): (() => Record<string, any>) => {
-  const callback = () => {
-    bus.emit('local', id)
+  options: {
+    state: () => Record<string, any>
+    actions?: Record<string, any>
+    getters?: Record<string, any>
   }
-  _storeCache[id] = observer(id, options.state(), callback)
+): (() => Record<string, any>) => {
+  const state = JSON.parse(JSON.stringify(options.state()))
+  const __store = observer(null, Object.assign({}, options.state()), callback)
+  function callback(_id: string) {
+    bus.emit('local', _id)
+  }
+  _storeCache[id] = __store
+  if (options.actions) {
+    try {
+      Object.keys(options.actions).map((key) => {
+        _storeCache[id][key] = options.actions && options.actions[key].bind(__store)
+      })
+    } catch (_) {}
+  }
+  if (options.getters) {
+    try {
+      Object.keys(options.getters).map((key) => {
+        __store[key] = options.getters && options.getters[key](state)
+      })
+    } catch (_) {}
+  }
   return () => {
     const update = useUpdate()
-    const store = _storeCache[id]
+    const store = __store
     useEffect(() => {
-      bus.on('local', update)
+      bus.on('local', (storeKey) => {
+        if ((storeKey as string) in state) {
+          if (options.getters) {
+            try {
+              Object.keys(options.getters).map((key) => {
+                __store[key] =
+                  options.getters && options.getters[key](JSON.parse(JSON.stringify(__store)))
+              })
+            } catch (_) {}
+          }
+          update()
+        }
+      })
       return () => {
         bus.off('local')
       }
