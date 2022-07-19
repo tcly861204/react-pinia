@@ -74,6 +74,16 @@ const useStore = defineStore('count', {
       count: 0,
     }
   },
+  getters: {
+    doubleCount: (state: Record<string, any>) => {
+      return state.count * 2
+    },
+  },
+  actions: {
+    add() {
+      this.count += 1
+    },
+  },
 })
 
 const Child = () => {
@@ -86,13 +96,8 @@ const App = () => {
   return (
     <section>
       <p>count: {store.count}</p>
-      <button
-        onClick={() => {
-          store.count += 1
-        }}
-      >
-        add
-      </button>
+      <p>doubleCount: {store.doubleCount}</p>
+      <button onClick={store.add}>add</button>
       <Child />
     </section>
   )
