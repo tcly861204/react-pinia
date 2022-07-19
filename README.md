@@ -1,10 +1,10 @@
-# mini-quick-store
+# react-pinia
 
-🍋 构建 react 极简状态管理
+🍍 构建 react 极简状态管理
 
 ## 安装
 
-> npm i mini-quick-store
+> npm i react-pinia
 
 ## store 的定义
 
@@ -28,7 +28,7 @@ export default {
 ```js
 // main.(tsx?|jsx)
 
-import { Provider } from 'mini-quick-store'
+import { Provider } from 'react-pinia'
 import store from '@/store'
 export default () => {
   return (
@@ -44,7 +44,7 @@ export default () => {
 ```js
 // page.(tsx?|jsx)
 
-import { createStore } from 'mini-quick-store'
+import { createStore } from 'react-pinia'
 
 export default () => {
   const { user } = createStore('user')
@@ -65,7 +65,7 @@ export default () => {
 ## 局部状态
 
 ```js
-import { defineStore } from 'mini-quick-store'
+import { defineStore } from 'react-pinia'
 
 // 定义局部状态
 const useStore = defineStore('count', {

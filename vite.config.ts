@@ -22,8 +22,8 @@ export default defineConfig({
       // 入口
       entry: path.resolve(entryDir, 'main.tsx'),
       // 组件库名字
-      name: 'mini-quick',
-      fileName: 'mini-quick',
+      name: 'react-pinia',
+      fileName: 'react-pinia',
       // 输出格式
       formats: ['umd'],
     },

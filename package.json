@@ -1,8 +1,8 @@
 {
-  "name": "mini-quick-store",
+  "name": "react-pinia",
   "version": "1.6.8",
-  "description": "🍋构建react极简状态管理",
-  "main": "lib/mini-quick.umd.js",
+  "description": "🍍构建react极简状态管理",
+  "main": "lib/react-pinia.umd.js",
   "types": "types/index.d.ts",
   "scripts": {
     "dev": "vite",
@@ -12,7 +12,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tcly861204/mini-quick.git"
+    "url": "git+https://github.com/tcly861204/react-pinia.git"
   },
   "keywords": [
     "react",
@@ -25,9 +25,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tcly861204/mini-quick/issues"
+    "url": "https://github.com/tcly861204/react-pinia/issues"
   },
-  "homepage": "https://github.com/tcly861204/mini-quick#readme",
+  "homepage": "https://github.com/tcly861204/react-pinia#readme",
   "devDependencies": {
     "@types/node": "^18.0.6",
     "@types/react": "^17.0.0",
