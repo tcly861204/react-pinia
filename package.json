@@ -1,6 +1,6 @@
 {
   "name": "mini-quick-store",
-  "version": "1.6.5",
+  "version": "1.6.8",
   "description": "🍋构建react极简状态管理",
   "main": "lib/mini-quick.umd.js",
   "types": "types/index.d.ts",
