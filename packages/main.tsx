@@ -55,7 +55,7 @@ export const createStore = (
 
 export const defineStore = (
   id: string,
-  options: Record<'state', any>
+  options: Record<'state' | 'actions', any>
 ): (() => Record<string, any>) => {
   const callback = () => {
     bus.emit('local', id)

@@ -1,32 +1,11 @@
 import { memo } from 'react'
-import { createStore, defineStore } from '../packages/main'
-
-const useStore = defineStore('app', {
-  state: () => {
-    return {
-      count: 0,
-    }
-  },
-})
-
-const Child = memo(() => {
-  const store = useStore()
-  return (
-    <section>
-      <p>{store.count}</p>
-      <button
-        onClick={() => {
-          store.count += 1
-        }}
-      >
-        添加
-      </button>
-    </section>
-  )
-})
+import { createStore } from '../packages/main'
+import useStore from './useStore'
+import Child from './Child'
 
 const Child2 = memo(() => {
   const store = useStore()
+  console.log('rendering child2')
   return (
     <section>
       <p>{store.count}</p>
