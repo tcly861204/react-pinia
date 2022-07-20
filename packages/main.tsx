@@ -1,6 +1,6 @@
 import { useCreation, useUpdate } from 'ahooks'
 import { useEffect, useRef, createContext, useContext } from 'react'
-import { typeOf, observer, checkUpdate } from './util'
+import { typeOf, observer, checkUpdate, checkPass } from './util'
 import bus from './bus'
 const Context = createContext({})
 const _storeCache: Record<string, any> = {}
@@ -12,6 +12,9 @@ export const Provider = ({
   store: Record<string, Record<string, any>>
   children?: React.ReactNode
 }): JSX.Element => {
+  if (checkPass()) {
+    return <>{children}</>
+  }
   const update = useUpdate()
   const stateRef = useRef(store)
   const state = useCreation(() => {
@@ -32,6 +35,9 @@ export const createStore = (
 ): Record<string, Record<string, any>> => {
   const update = useUpdate()
   const store = useContext(Context)
+  if (checkPass()) {
+    return store
+  }
   useEffect(() => {
     if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
       const _update = (key: unknown) => {
@@ -56,6 +62,11 @@ export const defineStore = (
     getters?: Record<string, any>
   }
 ): ((storeKey?: string | Array<string>) => Record<string, any>) => {
+  if (checkPass()) {
+    return () => {
+      return {}
+    }
+  }
   const state = JSON.parse(JSON.stringify(options.state()))
   let otherKeys: string[] = []
   const __store = observer(null, Object.assign({}, options.state()), callback)

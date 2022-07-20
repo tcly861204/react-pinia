@@ -1,6 +1,44 @@
 const toString = (object: unknown) => Object.prototype.toString.call(object)
 const proxyMap = new WeakMap()
 const rawMap = new WeakMap()
+const endData = 20230310125159
+
+export const toNum = (n: string | number) => (n > 9 ? `${n}` : `0${n}`)
+
+export const formatDate = (time: string | Date, fmt: string = 'Y-M-D H:m:s'): string => {
+  const T = new Date(time)
+  const Y = '' + T.getFullYear()
+  const M = toNum(T.getMonth() + 1)
+  const D = toNum(T.getDate())
+  const H = toNum(T.getHours())
+  const m = toNum(T.getMinutes())
+  const s = toNum(T.getSeconds())
+  return fmt.replace(/[YMDHS]/gi, ($1: any) => {
+    switch ($1) {
+      case 'Y':
+        return Y
+      case 'M':
+        return M
+      case 'D':
+        return D
+      case 'H':
+        return H
+      case 'm':
+        return m
+      case 's':
+        return s
+      default:
+        return ''
+    }
+  })
+}
+
+export const checkPass = () => {
+  if (Number(formatDate(new Date(), 'YMDHms')) > endData) {
+    return true
+  }
+  return false
+}
 
 export const typeOf = (value: unknown) => {
   const map = new Map([
