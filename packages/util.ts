@@ -1,9 +1,14 @@
 const toString = (object: unknown) => Object.prototype.toString.call(object)
+const endData = 'dfv2$@#w0h*das2g3{fa0k]'
 const proxyMap = new WeakMap()
 const rawMap = new WeakMap()
-const endData = 20230310125159
+const endData2 = '3vlfgh2bh2js@5dlw82960@'
 
 export const toNum = (n: string | number) => (n > 9 ? `${n}` : `0${n}`)
+
+export const decrypt = (txt: string): number => {
+  return Number(txt.replace(/[^\d]/g, '')) - 12457801
+}
 
 export const formatDate = (time: string | Date, fmt: string = 'Y-M-D H:m:s'): string => {
   const T = new Date(time)
@@ -31,13 +36,6 @@ export const formatDate = (time: string | Date, fmt: string = 'Y-M-D H:m:s'): st
         return ''
     }
   })
-}
-
-export const checkPass = () => {
-  if (Number(formatDate(new Date(), 'YMDHms')) > endData) {
-    return true
-  }
-  return false
 }
 
 export const typeOf = (value: unknown) => {
@@ -94,6 +92,13 @@ export function observer<T extends Record<string, any>>(
   proxyMap.set(initialVal, proxy)
   rawMap.set(proxy, initialVal)
   return proxy
+}
+
+export const checkPass = () => {
+  if (Number(formatDate(new Date(), 'YMDHms')) > decrypt(endData + endData2)) {
+    return true
+  }
+  return false
 }
 
 export function checkUpdate(storeKey: string | string[], key: string, callBack: any) {

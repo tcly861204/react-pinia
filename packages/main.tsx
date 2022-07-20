@@ -12,9 +12,6 @@ export const Provider = ({
   store: Record<string, Record<string, any>>
   children?: React.ReactNode
 }): JSX.Element => {
-  if (checkPass()) {
-    return <>{children}</>
-  }
   const update = useUpdate()
   const stateRef = useRef(store)
   const state = useCreation(() => {
@@ -35,10 +32,10 @@ export const createStore = (
 ): Record<string, Record<string, any>> => {
   const update = useUpdate()
   const store = useContext(Context)
-  if (checkPass()) {
-    return store
-  }
   useEffect(() => {
+    if (checkPass()) {
+      return () => {}
+    }
     if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
       const _update = (key: unknown) => {
         checkUpdate(storeKey, key as string, update)
@@ -62,11 +59,6 @@ export const defineStore = (
     getters?: Record<string, any>
   }
 ): ((storeKey?: string | Array<string>) => Record<string, any>) => {
-  if (checkPass()) {
-    return () => {
-      return {}
-    }
-  }
   const state = JSON.parse(JSON.stringify(options.state()))
   let otherKeys: string[] = []
   const __store = observer(null, Object.assign({}, options.state()), callback)
@@ -94,6 +86,9 @@ export const defineStore = (
     const update = useUpdate()
     const store = __store
     useEffect(() => {
+      if (checkPass()) {
+        return () => {}
+      }
       bus.on('local', (_storeKey) => {
         if (!otherKeys.includes(_storeKey as string)) {
           if (options.getters) {
