@@ -1,6 +1,6 @@
 {
   "name": "react-pinia",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "🍍构建react极简状态管理",
   "main": "lib/react-pinia.umd.js",
   "types": "types/index.d.ts",
