@@ -59,7 +59,7 @@ export const typeOf = (value: unknown) => {
 export function observer<T extends Record<string, any>>(
   storeKey: string | null,
   initialVal: T,
-  cb: (K: string) => void
+  cb: (T: string, U: string | null) => void
 ): T {
   const existingProxy = proxyMap.get(initialVal)
   if (existingProxy) {
@@ -80,12 +80,12 @@ export function observer<T extends Record<string, any>>(
         return Reflect.get(target, key)
       }
       const ret = Reflect.set(target, key, val)
-      cb(storeKey || (key as string))
+      cb(key as string, storeKey)
       return ret
     },
     deleteProperty(target, key) {
       const ret = Reflect.deleteProperty(target, key)
-      cb(storeKey || (key as string))
+      cb(key as string, storeKey)
       return ret
     },
   })

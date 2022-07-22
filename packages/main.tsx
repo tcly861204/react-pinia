@@ -1,6 +1,6 @@
 import { useCreation, useUpdate } from 'ahooks'
 import { useEffect, useRef, createContext, useContext } from 'react'
-import { typeOf, observer, checkUpdate, checkPass } from './util'
+import { typeOf, observer, checkUpdate } from './util'
 import bus from './bus'
 const Context = createContext({})
 const _storeCache: Record<string, any> = {}
@@ -12,30 +12,45 @@ export const Provider = ({
   store: Record<string, Record<string, any>>
   children?: React.ReactNode
 }): JSX.Element => {
-  const update = useUpdate()
   const stateRef = useRef(store)
   const state = useCreation(() => {
-    const callback = (key: string) => {
-      update()
-      bus.emit('update', key)
-    }
-    Object.keys(stateRef.current).map((key) => {
-      stateRef.current[key] = observer(key, stateRef.current[key], callback)
-    })
     return stateRef.current
   }, [])
   return <Context.Provider value={state}>{children}</Context.Provider>
 }
 
 export const createStore = (
+  store: Record<
+    string,
+    {
+      state: () => Record<string, any>
+      actions?: Record<string, any>
+      getters?: Record<string, any>
+    }
+  >
+) => {
+  const __store: Record<string, any> = {}
+  const stateCache: Record<string, string[]> = {}
+  const callback = (key: string, storeKey: string | null) => {
+    if (storeKey && stateCache[storeKey].includes(key)) {
+      // 只更新state里面的
+      bus.emit('update', storeKey)
+    }
+  }
+  Object.keys(store).map((key) => {
+    const state = store[key].state()
+    stateCache[key] = Object.keys(state)
+    __store[key] = observer(key, state, callback)
+  })
+  return __store
+}
+
+export const useState = (
   storeKey?: string | Array<string>
 ): Record<string, Record<string, any>> => {
   const update = useUpdate()
   const store = useContext(Context)
   useEffect(() => {
-    if (checkPass()) {
-      return () => {}
-    }
     if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
       const _update = (key: unknown) => {
         checkUpdate(storeKey, key as string, update)
@@ -86,9 +101,6 @@ export const defineStore = (
     const update = useUpdate()
     const store = __store
     useEffect(() => {
-      if (checkPass()) {
-        return () => {}
-      }
       bus.on('local', (_storeKey) => {
         if (!otherKeys.includes(_storeKey as string)) {
           if (options.getters) {

@@ -1,14 +1,27 @@
 import { memo } from 'react'
 import useStore from './useStore'
 import Child from './Child'
+import { useState } from '../packages/main'
 
 const Child2 = memo(() => {
-  const store = useStore('user')
-  console.log('rending app')
+  const { home } = useState('home')
+  console.log('rendeirng child2')
   return (
     <section>
-      <p>{store.user}</p>
-      <button onClick={() => (store.user = 'avc')}>修改</button>
+      <p>{home.count}</p>
+      <p>{home.user}</p>
+      <button onClick={() => (home.count += 1)}>修改</button>
+    </section>
+  )
+})
+
+const Child3 = memo(() => {
+  const { about } = useState('about')
+  console.log('rendeirng child3')
+  return (
+    <section>
+      <p>{about.num}</p>
+      <button onClick={() => (about.num += 1)}>修改</button>
     </section>
   )
 })
@@ -18,6 +31,7 @@ const App = () => {
     <section>
       <Child />
       <Child2 />
+      <Child3 />
     </section>
   )
 }
