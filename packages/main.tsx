@@ -28,7 +28,7 @@ export const createStore = (
       getters?: Record<string, any>
     }
   >
-) => {
+): Record<string, any> => {
   const __store: Record<string, any> = {}
   const stateCache: Record<string, string[]> = {}
   const callback = (key: string, storeKey: string | null) => {
