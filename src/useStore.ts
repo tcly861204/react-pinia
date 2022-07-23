@@ -14,7 +14,6 @@ const useStore = defineStore('app', {
   },
   actions: {
     add() {
-      console.log(this)
       this.count += 1
     },
   },

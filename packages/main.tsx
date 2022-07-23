@@ -1,6 +1,6 @@
 import { useCreation, useUpdate } from 'ahooks'
 import { useEffect, useRef, createContext, useContext } from 'react'
-import { typeOf, observer, checkUpdate } from './util'
+import { typeOf, observer } from './util'
 import bus from './bus'
 const Context = createContext({})
 const _storeCache: Record<string, any> = {}
@@ -34,7 +34,7 @@ export const createStore = (
   const stateCache: Record<string, string[]> = {}
   const callback = (key: string, storeKey: string | null) => {
     if (storeKey && stateCache[storeKey].includes(key)) {
-      bus.emit('update', storeKey)
+      bus.emit('global', storeKey)
     }
   }
   Object.keys(store).map((key) => {
@@ -44,7 +44,7 @@ export const createStore = (
     if (store[key].getters) {
       try {
         Object.keys(store[key].getters!).map(sub => {
-          __store[key][sub] = store[key].getters![sub](__store[key])
+          __store[key][sub] = store[key].getters![sub](JSON.parse(JSON.stringify(__store[key])))
         })
         _globalStoreCache[key] = store[key].getters
       } catch (_) {
@@ -64,18 +64,18 @@ export const createStore = (
 const updateGetters = (key: string, store: Record<string, Record<string, any>>) => {
   if ((key) in _globalStoreCache) {
     Object.keys(_globalStoreCache[key]).map(sub => {
-      store[key][sub] = _globalStoreCache[key][sub](store[key])
+      store[key][sub] = _globalStoreCache[key][sub](JSON.parse(JSON.stringify(store[key])))
     })
   }
 }
 
-export const useState = (
+export const useStore = (
   storeKey?: string | Array<string>
 ): Record<string, Record<string, any>> => {
   const update = useUpdate()
   const store = useContext(Context) as Record<string, Record<string, any>>
   useEffect(() => {
-    bus.on('update', (key: unknown) => {
+    bus.on('global', (key: unknown) => {
       if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
         if (
           (typeOf(storeKey) === 'string' && storeKey === key) ||
@@ -90,7 +90,7 @@ export const useState = (
       }
     })
     return () => {
-      bus.off('update', update)
+      bus.off('global', update)
     }
   }, [])
   return store
@@ -119,31 +119,33 @@ export const defineStore = (
       })
     } catch (_) {}
   }
-  if (options.getters) {
-    otherKeys = otherKeys.concat(Object.keys(options.getters))
-    try {
-      Object.keys(options.getters).map((key) => {
-        __store[key] = options.getters && options.getters[key](state)
-      })
-    } catch (_) {}
+  const updateGetters = (store: Record<string, any>) => {
+    if (options.getters) {
+      otherKeys = otherKeys.concat(Object.keys(options.getters))
+      try {
+        Object.keys(options.getters).map((key) => {
+          __store[key] = options.getters && options.getters[key](store)
+        })
+      } catch (_) {}
+    }
   }
+  updateGetters(state)
   return (storeKey?: string | Array<string>) => {
     const update = useUpdate()
     const store = __store
     useEffect(() => {
       bus.on('local', (_storeKey) => {
         if (!otherKeys.includes(_storeKey as string)) {
-          if (options.getters) {
-            try {
-              Object.keys(options.getters).map((key) => {
-                __store[key] =
-                  options.getters && options.getters[key](JSON.parse(JSON.stringify(__store)))
-              })
-            } catch (_) {}
-          }
           if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
-            checkUpdate(storeKey, _storeKey as string, update)
+            if (
+              (typeOf(storeKey) === 'string' && storeKey === _storeKey) ||
+              (typeOf(storeKey) === 'array' && storeKey.includes(_storeKey as string))
+            ) {
+              updateGetters(JSON.parse(JSON.stringify(__store)))
+              update()
+            }
           } else {
+            updateGetters(JSON.parse(JSON.stringify(__store)))
             update()
           }
         }

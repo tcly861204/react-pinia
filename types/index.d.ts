@@ -4,7 +4,7 @@ declare module 'react-pinia' {
     children: React.ReactNode
   }
   export function Provider(props: ProviderProps): JSX.Element
-  export function useState(storeKey?: string | Array<string>): Record<string, Record<string, any>>
+  export function useStore(storeKey?: string | Array<string>): Record<string, Record<string, any>>
   export function createStore(
     store: Record<
       string,

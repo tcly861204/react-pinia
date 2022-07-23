@@ -100,12 +100,3 @@ export const checkPass = () => {
   }
   return false
 }
-
-export function checkUpdate(storeKey: string | string[], key: string, callBack: any) {
-  if (
-    (typeOf(storeKey) === 'string' && storeKey === key) ||
-    (typeOf(storeKey) === 'array' && storeKey.includes(key as string))
-  ) {
-    callBack()
-  }
-}
