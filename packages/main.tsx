@@ -4,6 +4,7 @@ import { typeOf, observer, checkUpdate } from './util'
 import bus from './bus'
 const Context = createContext({})
 const _storeCache: Record<string, any> = {}
+const _globalStoreCache: Record<string, any> = {}
 
 export const Provider = ({
   store,
@@ -33,7 +34,6 @@ export const createStore = (
   const stateCache: Record<string, string[]> = {}
   const callback = (key: string, storeKey: string | null) => {
     if (storeKey && stateCache[storeKey].includes(key)) {
-      // 只更新state里面的
       bus.emit('update', storeKey)
     }
   }
@@ -41,24 +41,54 @@ export const createStore = (
     const state = store[key].state()
     stateCache[key] = Object.keys(state)
     __store[key] = observer(key, state, callback)
+    if (store[key].getters) {
+      try {
+        Object.keys(store[key].getters!).map(sub => {
+          __store[key][sub] = store[key].getters![sub](__store[key])
+        })
+        _globalStoreCache[key] = store[key].getters
+      } catch (_) {
+      }
+    }
+    if (store[key].actions) {
+      try {
+        Object.keys(store[key].actions!).map((sub) => {
+          __store[key][sub] = store[key].actions![sub].bind(__store[key])
+        })
+      } catch (_) {}
+    }
   })
   return __store
+}
+
+const updateGetters = (key: string, store: Record<string, Record<string, any>>) => {
+  if ((key) in _globalStoreCache) {
+    Object.keys(_globalStoreCache[key]).map(sub => {
+      store[key][sub] = _globalStoreCache[key][sub](store[key])
+    })
+  }
 }
 
 export const useState = (
   storeKey?: string | Array<string>
 ): Record<string, Record<string, any>> => {
   const update = useUpdate()
-  const store = useContext(Context)
+  const store = useContext(Context) as Record<string, Record<string, any>>
   useEffect(() => {
-    if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
-      const _update = (key: unknown) => {
-        checkUpdate(storeKey, key as string, update)
+    bus.on('update', (key: unknown) => {
+      if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
+        if (
+          (typeOf(storeKey) === 'string' && storeKey === key) ||
+          (typeOf(storeKey) === 'array' && storeKey.includes(key as string))
+        ) {
+          updateGetters(key as string, store)
+          update()
+        }
+      } else {
+        updateGetters(key as string, store)
+        update()
       }
-      bus.on('update', _update)
-    } else {
-      bus.on('update', update)
-    }
+    })
     return () => {
       bus.off('update', update)
     }

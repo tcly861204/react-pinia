@@ -6,11 +6,13 @@ import { useState } from '../packages/main'
 const Child2 = memo(() => {
   const { home } = useState('home')
   console.log('rendeirng child2')
+  console.log(home)
   return (
     <section>
-      <p>{home.count}</p>
+      <p>count: {home.count}</p>
+      <p>doubleCount: {home.doubleCount}</p>
       <p>{home.user}</p>
-      <button onClick={() => (home.count += 1)}>修改</button>
+      <button onClick={home.add}>修改</button>
     </section>
   )
 })
