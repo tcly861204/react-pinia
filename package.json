@@ -17,7 +17,15 @@
   "keywords": [
     "react",
     "store",
-    "state"
+    "state",
+    "react-pinia",
+    "typescript",
+    "ts",
+    "type",
+    "Provider",
+    "createStore",
+    "useStore",
+    "defineStore"
   ],
   "author": {
     "name": "tcly861204",

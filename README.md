@@ -2,6 +2,8 @@
 
 🍍 构建 react 极简状态管理
 
+<a href="https://npmjs.com/package/react-pinia"><img src="https://badgen.net/npm/v/react-pinia" alt="npm package"></a>
+
 ## 安装
 
 > npm i react-pinia
@@ -123,3 +125,7 @@ const Child = memo(() => {
 })
 export default Child
 ```
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)
