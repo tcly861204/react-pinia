@@ -2,6 +2,7 @@ import { useEffect, useRef, createContext, useContext } from 'react'
 import { useCreation, useUpdate } from './hooks/index'
 import { typeOf, observer } from './util'
 import bus from './bus'
+import Vs from './version'
 const Context = createContext({})
 const _storeCache: Record<string, any> = {}
 const _globalStoreCache: Record<string, any> = {}
@@ -13,7 +14,7 @@ const updateGetters = (key: string, store: Record<string, Record<string, any>>) 
   }
 }
 
-export const version = '1.8.2'
+export const version = Vs
 
 export const Provider = ({
   store,
