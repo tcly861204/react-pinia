@@ -1,10 +1,19 @@
-import { useCreation, useUpdate } from 'ahooks'
 import { useEffect, useRef, createContext, useContext } from 'react'
+import { useCreation, useUpdate } from './hooks/index'
 import { typeOf, observer } from './util'
 import bus from './bus'
 const Context = createContext({})
 const _storeCache: Record<string, any> = {}
 const _globalStoreCache: Record<string, any> = {}
+const updateGetters = (key: string, store: Record<string, Record<string, any>>) => {
+  if (key in _globalStoreCache) {
+    Object.keys(_globalStoreCache[key]).map((sub) => {
+      store[key][sub] = _globalStoreCache[key][sub](JSON.parse(JSON.stringify(store[key])))
+    })
+  }
+}
+
+export const version = '1.8.0'
 
 export const Provider = ({
   store,
@@ -43,12 +52,11 @@ export const createStore = (
     __store[key] = observer(key, state, callback)
     if (store[key].getters) {
       try {
-        Object.keys(store[key].getters!).map(sub => {
+        Object.keys(store[key].getters!).map((sub) => {
           __store[key][sub] = store[key].getters![sub](JSON.parse(JSON.stringify(__store[key])))
         })
         _globalStoreCache[key] = store[key].getters
-      } catch (_) {
-      }
+      } catch (_) {}
     }
     if (store[key].actions) {
       try {
@@ -59,14 +67,6 @@ export const createStore = (
     }
   })
   return __store
-}
-
-const updateGetters = (key: string, store: Record<string, Record<string, any>>) => {
-  if ((key) in _globalStoreCache) {
-    Object.keys(_globalStoreCache[key]).map(sub => {
-      store[key][sub] = _globalStoreCache[key][sub](JSON.parse(JSON.stringify(store[key])))
-    })
-  }
 }
 
 export const useStore = (

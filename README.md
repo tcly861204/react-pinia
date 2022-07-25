@@ -9,41 +9,48 @@
 ## 全局使用
 
 定义数据源
+
 ```ts
 import { createStore } from 'react-pinia'
-const store = createStore({
-  home: {
-    state: () => {
-      return {
-        count: 1,
-        user: 'hello',
-      }
-    },
-    getters: {
-      doubleCount: (state: Record<string, any>) => {
-        return state.count * 2
-      },
-    },
-    actions: {
-      add () {
-        this.count += 1
-        console.log(this)
-      }
+
+const home = {
+  state: () => {
+    return {
+      count: 1,
+      user: 'hello',
     }
   },
-  about: {
-    state: () => {
-      return {
-        num: 1,
-      }
+  getters: {
+    doubleCount: (state: Record<string, any>) => {
+      return state.count * 2
     },
   },
+  actions: {
+    add() {
+      this.count += 1
+      console.log(this)
+    },
+  },
+}
+
+const about = {
+  state: () => {
+    return {
+      num: 1,
+    }
+  },
+}
+
+const store = createStore({
+  home,
+  about,
 })
 
 export default store
 ```
 
 全局挂载
+
 ```ts
 import { Provider } from 'react-pinia'
 import store from '@/store'
@@ -56,6 +63,7 @@ ReactDOM.render(
 ```
 
 全局使用
+
 ```ts
 import { useStore } from 'react-pinia'
 const App = memo(() => {
@@ -73,7 +81,9 @@ export default App
 ```
 
 ## 局部使用
+
 局部使用不需要全局挂载，直接使用即可
+
 ```ts
 // 定义数据源
 import { defineStore } from 'react-pinia'
