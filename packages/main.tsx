@@ -13,7 +13,7 @@ const updateGetters = (key: string, store: Record<string, Record<string, any>>) 
   }
 }
 
-export const version = '1.8.0'
+export const version = '1.8.2'
 
 export const Provider = ({
   store,
