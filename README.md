@@ -126,6 +126,16 @@ const Child = memo(() => {
 export default Child
 ```
 
+## 赞助 | Sponsored
+
+开源不易, 有了您的赞助, 我们会做的更好 👋
+
+<img src="./wepay.jpg" width="180px" />
+
+## 技术反馈和交流群 | Technical feedback and communication
+
+微信：cobill2008
+
 ## License
 
 [MIT](http://opensource.org/licenses/MIT)
