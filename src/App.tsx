@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import Child from './Child'
-import { useStore } from '../packages/main'
+import { useStore, defineStore } from '../packages/main'
 
 const Child2 = memo(() => {
   const { home } = useStore('home')
@@ -27,12 +27,42 @@ const Child3 = memo(() => {
   )
 })
 
+const useChildStore = defineStore('child', {
+  state: () => {
+    return {
+      count: 1,
+      user: 'hello',
+    }
+  },
+  getters: {
+    doubleCount: (state: Record<string, any>) => {
+      return state.count * 2
+    },
+  },
+  actions: {
+    add() {
+      this.count += 1
+    },
+  },
+})
+
+const Child4 = memo(() => {
+  const { count, add } = useChildStore()
+  return (
+    <section>
+      <p>child4 {count}</p>
+      <button onClick={add}>添加</button>
+    </section>
+  )
+})
+
 const App = () => {
   return (
     <section>
       <Child />
       <Child2 />
       <Child3 />
+      <Child4 />
     </section>
   )
 }
