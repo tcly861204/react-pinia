@@ -1,6 +1,4 @@
 const toString = (object: unknown) => Object.prototype.toString.call(object)
-const proxyMap = new WeakMap()
-const rawMap = new WeakMap()
 export const typeOf = (value: unknown) => {
   const map = new Map([
     ['[object Function]', 'function'],
@@ -19,6 +17,8 @@ export const typeOf = (value: unknown) => {
   return map.get(toString(value))
 }
 
+const proxyMap = new WeakMap()
+const rawMap = new WeakMap()
 export function observer<T extends Record<string, any>>(
   storeKey: string | null,
   initialVal: T,
