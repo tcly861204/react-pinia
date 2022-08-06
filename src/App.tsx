@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react'
+import { memo } from 'react'
 import Child from './Child'
 import { useStore, defineStore } from '../packages/main'
 const Child2 = memo(() => {
