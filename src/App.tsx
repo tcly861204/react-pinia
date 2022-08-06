@@ -46,11 +46,12 @@ const useChildStore = defineStore('child', {
 })
 
 const Child4 = () => {
-  const { count, add } = useChildStore()
+  const { count, user, add } = useChildStore()
   console.log('rendering child4')
   return (
     <section>
-      <p>child4 {count}</p>
+      <p>child4: {count}</p>
+      <p>user: {user}</p>
       <button onClick={add}>添加</button>
     </section>
   )
