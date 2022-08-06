@@ -19,7 +19,7 @@ const home = {
   state: () => {
     return {
       count: 1,
-      user: 'hello',
+      user: 'hello world',
     }
   },
   getters: {
@@ -114,12 +114,12 @@ const useStore = defineStore('app', {
 import { memo } from 'react'
 import useStore from './useStore'
 const Child = memo(() => {
-  const store = useStore('count')
+  const { count, doubleCount, add } = useStore('count')
   return (
     <section>
-      <p>{store.count}</p>
-      <p>{store.doubleCount}</p>
-      <button onClick={store.add}>累加</button>
+      <p>{count}</p>
+      <p>{doubleCount}</p>
+      <button onClick={add}>累加</button>
     </section>
   )
 })
