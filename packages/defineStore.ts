@@ -1,9 +1,9 @@
 import mitt from 'mitt'
 import { useEffect } from 'react'
 import { useUpdate } from './hooks/index'
-import { typeOf, observer } from './util'
+import { typeOf, observer } from './utils/index'
 
-const _storeCache: Record<string, any> = {}
+const defineStoreCache: Record<string, any> = {}
 export const defineStore = (
   id: string,
   options: {
@@ -19,12 +19,12 @@ export const defineStore = (
   function callback(_id: string) {
     bus.emit('local', _id)
   }
-  _storeCache[id] = __store
+  defineStoreCache[id] = __store
   if (options.actions) {
     otherKeys = otherKeys.concat(Object.keys(options.actions))
     try {
       Object.keys(options.actions).map((key) => {
-        _storeCache[id][key] = options.actions && options.actions[key].bind(__store)
+        defineStoreCache[id][key] = options.actions && options.actions[key].bind(__store)
       })
     } catch (_) {}
   }

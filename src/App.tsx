@@ -1,7 +1,6 @@
 import { memo, useCallback, useState } from 'react'
 import Child from './Child'
 import { useStore, defineStore } from '../packages/main'
-
 const Child2 = memo(() => {
   const { home } = useStore('home')
   console.log('rendeirng child2')
@@ -46,30 +45,24 @@ const useChildStore = defineStore('child', {
   },
 })
 
-const Child4 = ({ onClick }: { onClick: () => void }) => {
-  const { count } = useChildStore()
+const Child4 = () => {
+  const { count, add } = useChildStore()
   console.log('rendering child4')
   return (
     <section>
       <p>child4 {count}</p>
-      <button onClick={onClick}>添加</button>
+      <button onClick={add}>添加</button>
     </section>
   )
 }
 
 const App = () => {
-  const [count, setCount] = useState(0)
-  const handleClick = useCallback(() => {
-    console.log('callback')
-    setCount(count + 1)
-  }, [count])
   return (
     <section>
       <Child />
       <Child2 />
       <Child3 />
-      app {count}
-      <Child4 onClick={() => handleClick()} />
+      <Child4 />
     </section>
   )
 }

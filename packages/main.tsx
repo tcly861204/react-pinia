@@ -1,12 +1,12 @@
 import { useEffect, useRef, createContext, useContext } from 'react'
 import { useCreation, useUpdate } from './hooks/index'
-import { typeOf, observer } from './util'
+import { typeOf, observer } from './utils/index'
 import mitt from 'mitt'
-import Vs from './version'
 
 const bus = mitt()
 const Context = createContext({})
 const _globalStoreCache: Record<string, any> = {}
+
 const updateGetters = (key: string, store: Record<string, Record<string, any>>) => {
   if (key in _globalStoreCache) {
     Object.keys(_globalStoreCache[key]).map((sub) => {
@@ -14,8 +14,6 @@ const updateGetters = (key: string, store: Record<string, Record<string, any>>) 
     })
   }
 }
-
-export const version = Vs
 
 export const Provider = ({
   store,
@@ -97,5 +95,7 @@ export const useStore = (
   }, [])
   return store
 }
+
+export * from './version'
 
 export * from './defineStore'
