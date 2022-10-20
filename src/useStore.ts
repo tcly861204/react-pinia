@@ -1,6 +1,6 @@
 import { defineStore } from '../packages/main'
 
-const useStore = defineStore('app', {
+const useStore = defineStore({
   state: () => {
     return {
       count: 1,
@@ -8,7 +8,7 @@ const useStore = defineStore('app', {
     }
   },
   getters: {
-    doubleCount: (state: Record<string, any>) => {
+    doubleCount: (state) => {
       return state.count * 2
     },
   },
@@ -16,7 +16,29 @@ const useStore = defineStore('app', {
     add() {
       this.count += 1
     },
+    changeUser() {
+      this.user = 'zhangsan'
+    },
   },
 })
+
+// const useStore = defineStore('app', {
+//   state: () => {
+//     return {
+//       count: 1,
+//       user: 'hello',
+//     }
+//   },
+//   getters: {
+//     doubleCount: (state: Record<string, any>) => {
+//       return state.count * 2
+//     },
+//   },
+//   actions: {
+//     add() {
+//       this.count += 1
+//     },
+//   },
+// })
 
 export default useStore

@@ -2,13 +2,14 @@ import { memo } from 'react'
 import Child from './Child'
 import { useStore, defineStore } from '../packages/main'
 const Child2 = memo(() => {
-  const { home } = useStore('home')
+  const home = useStore('home')()
+  const about = useStore('about')('hello')
   console.log('rendeirng child2')
-  console.log(home)
   return (
     <section>
       <p>count: {home.count}</p>
       <p>doubleCount: {home.doubleCount}</p>
+      <p>num: {about.num}</p>
       <p>{home.user}</p>
       <button onClick={home.add}>修改</button>
     </section>
@@ -16,17 +17,17 @@ const Child2 = memo(() => {
 })
 
 const Child3 = memo(() => {
-  const { about } = useStore('about')
+  const about = useStore('about')()
   console.log('rendeirng child3')
   return (
     <section>
-      <p>{about.num}</p>
+      <p>about: {about.num}</p>
       <button onClick={() => (about.num += 1)}>修改</button>
     </section>
   )
 })
 
-const useChildStore = defineStore('child', {
+const useChildStore = defineStore({
   state: () => {
     return {
       count: 1,

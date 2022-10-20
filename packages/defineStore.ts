@@ -2,59 +2,47 @@ import mitt from 'mitt'
 import { useEffect } from 'react'
 import { useUpdate } from './hooks/index'
 import { typeOf, observer } from './utils/index'
-
-const defineStoreCache: Record<string, any> = {}
-export const defineStore = (
-  id: string,
-  options: {
-    state: () => Record<string, any>
-    actions?: Record<string, any>
-    getters?: Record<string, any>
-  }
-): ((storeKey?: string | Array<string>) => Record<string, any>) => {
+export interface createStoreOption {
+  state: () => Record<string, any>
+  actions?: Record<string, (this: Record<string, any>) => any>
+  getters?: Record<string, (state: Record<string, any>) => any>
+}
+export const defineStore = (options: createStoreOption) => {
   const bus = mitt()
-  const state = JSON.parse(JSON.stringify(options.state()))
-  let otherKeys: string[] = []
-  const __store = observer(null, Object.assign({}, options.state()), callback)
-  function callback(_id: string) {
-    bus.emit('local', _id)
+  const initState = options.state()
+  const actionKeys: string[] = []
+  const _store = observer(null, initState, callback)
+  function callback(id: string) {
+    bus.emit('local', id)
   }
-  defineStoreCache[id] = __store
-  if (options.actions) {
-    otherKeys = otherKeys.concat(Object.keys(options.actions))
+  const updateGetters = (store: Record<string, any>) => {
     try {
-      Object.keys(options.actions).map((key) => {
-        defineStoreCache[id][key] = options.actions && options.actions[key].bind(__store)
+      Object.keys(options.getters!).map((key) => {
+        _store[key] = options.getters && options.getters[key](store)
       })
     } catch (_) {}
   }
-  const updateGetters = (store: Record<string, any>) => {
-    if (options.getters) {
-      otherKeys = otherKeys.concat(Object.keys(options.getters))
-      try {
-        Object.keys(options.getters).map((key) => {
-          __store[key] = options.getters && options.getters[key](store)
-        })
-      } catch (_) {}
-    }
+  if (options.actions) {
+    Object.keys(options.actions).map((key) => {
+      actionKeys.push(key)
+      _store[key] = options.actions![key].bind(_store)
+      return key
+    })
   }
-  updateGetters(state)
+  updateGetters(initState)
   return (storeKey?: string | Array<string>) => {
     const update = useUpdate()
-    const store = __store
+    const store = _store
     useEffect(() => {
-      bus.on('local', (_storeKey) => {
-        if (!otherKeys.includes(_storeKey as string)) {
-          if (storeKey && (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array')) {
-            if (
-              (typeOf(storeKey) === 'string' && storeKey === _storeKey) ||
-              (typeOf(storeKey) === 'array' && storeKey.includes(_storeKey as string))
-            ) {
-              updateGetters(JSON.parse(JSON.stringify(__store)))
+      bus.on('local', (emitKey: unknown) => {
+        if (!actionKeys.includes(emitKey as string)) {
+          if (typeOf(storeKey) === 'string' || typeOf(storeKey) === 'array') {
+            if (emitKey === storeKey || (storeKey as string[]).includes(emitKey as string)) {
+              updateGetters(_store)
               update()
             }
           } else {
-            updateGetters(JSON.parse(JSON.stringify(__store)))
+            updateGetters(_store)
             update()
           }
         }

@@ -13,16 +13,17 @@ const store = createStore({
       },
     },
     actions: {
-      add () {
+      add() {
         this.count += 1
         console.log(this)
-      }
-    }
+      },
+    },
   },
   about: {
     state: () => {
       return {
         num: 1,
+        hello: 'abc',
       }
     },
   },
