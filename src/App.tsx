@@ -2,8 +2,8 @@ import { memo } from 'react'
 import Child from './Child'
 import { useStore, defineStore } from '../packages/main'
 const Child2 = memo(() => {
-  const home = useStore('home')()
-  const about = useStore('about')('hello')
+  const home = useStore('home')
+  const about = useStore('about')
   console.log('rendeirng child2')
   return (
     <section>
@@ -17,7 +17,7 @@ const Child2 = memo(() => {
 })
 
 const Child3 = memo(() => {
-  const about = useStore('about')()
+  const about = useStore('about')
   console.log('rendeirng child3')
   return (
     <section>

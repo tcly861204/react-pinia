@@ -34,6 +34,7 @@ export const useStore = (globalKey: string, storeKey?: string | Array<string>) =
     string,
     (storeKey?: string | Array<string>) => Record<string, any>
   >
+  console.log(store)
   return store[globalKey](storeKey)
 }
 
