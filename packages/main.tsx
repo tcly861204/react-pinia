@@ -6,13 +6,15 @@ import { defineStore, createStoreOption } from './defineStore'
 const Context = createContext({})
 const globalStoreCache: Record<string, any> = {}
 
+export interface ProviderProps {
+  store: Record<string, Record<string, any>>
+  children: React.ReactNode
+}
+
 export const Provider = ({
   store,
   children,
-}: {
-  store: Record<string, Record<string, any>>
-  children?: React.ReactNode
-}): JSX.Element => {
+}: ProviderProps): JSX.Element => {
   const stateRef = useRef(store)
   const state = useCreation(() => {
     return stateRef.current

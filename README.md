@@ -13,9 +13,9 @@
 定义数据源
 
 ```ts
-import { createStore } from 'react-pinia'
+import { createStore, createStoreOption } from 'react-pinia'
 
-const home = {
+const home: createStoreOption = {
   state: () => {
     return {
       count: 1,
@@ -23,7 +23,7 @@ const home = {
     }
   },
   getters: {
-    doubleCount: (state: Record<string, any>) => {
+    doubleCount: (state) => {
       return state.count * 2
     },
   },
@@ -69,7 +69,7 @@ ReactDOM.render(
 ```ts
 import { useStore } from 'react-pinia'
 const App = memo(() => {
-  const { home } = useStore('home')
+  const home = useStore('home')
   return (
     <section>
       <p>count: {home.count}</p>
@@ -89,7 +89,7 @@ export default App
 ```ts
 // 定义数据源
 import { defineStore } from 'react-pinia'
-const useStore = defineStore('app', {
+const useStore = defineStore({
   state: () => {
     return {
       count: 1,
