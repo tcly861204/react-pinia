@@ -97,7 +97,7 @@ const useStore = defineStore({
     }
   },
   getters: {
-    doubleCount: (state: Record<string, any>) => {
+    doubleCount: (state) => {
       return state.count * 2
     },
   },
