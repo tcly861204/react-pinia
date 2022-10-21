@@ -27,12 +27,12 @@ export const createStore = (options: Record<string, createStoreOption>) => {
   return globalStoreCache
 }
 
-export const useStore = (globalKey: string) => {
+export const useStore = (globalKey: string, storeKey?: string | Array<string>) => {
   const store = useContext(Context) as Record<
     string,
     (storeKey?: string | Array<string>) => Record<string, any>
   >
-  return (storeKey?: string | Array<string>) => store[globalKey](storeKey)
+  return store[globalKey](storeKey)
 }
 
 export * from './version'
