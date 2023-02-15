@@ -22,6 +22,10 @@ export const Provider = ({
   return <Context.Provider value={state}>{children}</Context.Provider>
 }
 
+export const defineModel = (options: createStoreOption): createStoreOption => {
+  return options
+}
+
 export const createStore = (options: Record<string, createStoreOption>) => {
   Object.keys(options).map((key) => {
     globalStoreCache[key] = defineStore(options[key])
