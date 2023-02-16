@@ -11,7 +11,13 @@ const Child2 = memo(() => {
       <p>doubleCount: {home.doubleCount}</p>
       <p>num: {about.num}</p>
       <p>{home.user}</p>
-      <button onClick={home.add}>修改</button>
+      <button
+        onClick={() => {
+          home.add(10, 1000)
+        }}
+      >
+        修改
+      </button>
     </section>
   )
 })

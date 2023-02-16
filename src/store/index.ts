@@ -13,9 +13,9 @@ const store = createStore({
       },
     },
     actions: {
-      add() {
-        this.count += 1
-        console.log(this)
+      add(count, sum) {
+        console.log(sum)
+        this.count += count
       },
     },
   },

@@ -4,7 +4,7 @@ import { useUpdate } from './hooks/index'
 import { typeOf, observer } from './utils/index'
 export interface createStoreOption {
   state: () => Record<string, any>
-  actions?: Record<string, (this: Record<string, any>) => any>
+  actions?: Record<string, (this: Record<string, any>, ...args: any) => any>
   getters?: Record<string, (state: Record<string, any>) => any>
 }
 export const defineStore = (options: createStoreOption) => {
