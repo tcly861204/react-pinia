@@ -33,9 +33,14 @@ const home: createStoreOption = {
       console.log(this)
     },
   },
+  // 是否持久化数据
+  persist: {
+    key: 'home',
+    storage: 'localStorage' // 'localStorage' | 'sessionStorage' 默认使用localStorage
+  }
 }
 
-const about = {
+const about: createStoreOption = {
   state: () => {
     return {
       num: 1,
@@ -106,6 +111,11 @@ const useStore = defineStore({
       this.count += 1
     },
   },
+  // 是否持久化数据
+  persist: {
+    key: 'user',
+    storage?: 'localStorage' // 'localStorage' | 'sessionStorage' 默认使用localStorage
+  }
 })
 ```
 

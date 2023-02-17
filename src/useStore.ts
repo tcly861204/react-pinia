@@ -20,6 +20,9 @@ const useStore = defineStore({
       this.user = 'zhangsan'
     },
   },
+  persist: {
+    key: 'home'
+  }
 })
 
 // const useStore = defineStore('app', {

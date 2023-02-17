@@ -1,9 +1,8 @@
 import useStore from './useStore'
 import { memo } from 'react'
 const Child = memo(() => {
-  const store = useStore('count')
+  const store = useStore()
   console.log('rendering child')
-  console.log(store)
   return (
     <section>
       <p>{store.count}</p>

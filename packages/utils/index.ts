@@ -1,4 +1,10 @@
 const toString = (object: unknown) => Object.prototype.toString.call(object)
+declare const storageType: ["localStorage", "sessionStorage"];
+export type Persist = {
+  key: string;
+  storage?: typeof storageType[number]
+}
+
 export const typeOf = (value: unknown) => {
   const map = new Map([
     ['[object Function]', 'function'],
@@ -55,4 +61,36 @@ export function observer<T extends Record<string, any>>(
   proxyMap.set(initialVal, proxy)
   rawMap.set(proxy, initialVal)
   return proxy
+}
+
+export function getStorage(persist: Persist): Record<string, any> | null {
+  let storage = localStorage
+  if ('storage' in persist && persist.storage === 'sessionStorage') {
+    storage = sessionStorage
+  }
+  try {
+    const local = storage.getItem(persist.key)
+    if (local) {
+      return JSON.parse(local)
+    }
+  } catch (_) {
+  }
+  return null
+}
+
+export function setStorage(persist: Persist, val: string): void {
+  let storage = localStorage
+  if ('storage' in persist && persist.storage === 'sessionStorage') {
+    storage = sessionStorage
+  }
+  try {
+    storage.setItem(persist.key, val)
+  } catch (_) {
+  }
+}
+
+export function updateState(initState: Record<string, any>, store: Record<string, any>): void {
+  Object.keys(initState).forEach(key => {
+    initState[key] = store[key]
+  })
 }

@@ -68,9 +68,9 @@ const App = () => {
   return (
     <section>
       <Child />
-      <Child2 />
+      {/* <Child2 />
       <Child3 />
-      <Child4 />
+      <Child4 /> */}
     </section>
   )
 }

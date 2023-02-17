@@ -8,7 +8,7 @@ const store = createStore({
       }
     },
     getters: {
-      doubleCount: (state: Record<string, any>) => {
+      doubleCount: (state) => {
         return state.count * 2
       },
     },
@@ -17,15 +17,7 @@ const store = createStore({
         console.log(sum)
         this.count += count
       },
-    },
-  },
-  about: {
-    state: () => {
-      return {
-        num: 1,
-        hello: 'abc',
-      }
-    },
+    }
   },
 })
 
