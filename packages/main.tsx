@@ -11,10 +11,7 @@ export interface ProviderProps {
   children: React.ReactNode
 }
 
-export const Provider = ({
-  store,
-  children,
-}: ProviderProps): JSX.Element => {
+export const Provider = ({ store, children }: ProviderProps): JSX.Element => {
   const stateRef = useRef(store)
   const state = useCreation(() => {
     return stateRef.current
@@ -38,7 +35,10 @@ export const useStore = (globalKey: string, storeKey?: string | Array<string>) =
     string,
     (storeKey?: string | Array<string>) => Record<string, any>
   >
-  return store[globalKey](storeKey)
+  if (globalKey in store) {
+    return store[globalKey](storeKey)
+  }
+  return {}
 }
 
 export * from './version'

@@ -5,6 +5,10 @@ const store = createStore({
       return {
         count: 1,
         user: 'hello',
+        info: {
+          useName: 'admin',
+          password: '123456',
+        },
       }
     },
     getters: {
@@ -13,11 +17,22 @@ const store = createStore({
       },
     },
     actions: {
-      add(count, sum) {
-        console.log(sum)
+      add(count) {
         this.count += count
+        this.info.useName = 'cobill'
+        this.info.email = '356671808@qq.com'
       },
-    }
+    },
+    persist: {
+      key: 'home',
+    },
+  },
+  about: {
+    state: () => {
+      return {
+        num: 1,
+      }
+    },
   },
 })
 

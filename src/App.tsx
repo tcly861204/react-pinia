@@ -11,9 +11,10 @@ const Child2 = memo(() => {
       <p>doubleCount: {home.doubleCount}</p>
       <p>num: {about.num}</p>
       <p>{home.user}</p>
+      <p>email {home.info.email || ''}</p>
       <button
         onClick={() => {
-          home.add(10, 1000)
+          home.add(1)
         }}
       >
         修改
@@ -67,7 +68,8 @@ const Child4 = () => {
 const App = () => {
   return (
     <section>
-      <Child />
+      <Child2 />
+      {/* <Child /> */}
       {/* <Child2 />
       <Child3 />
       <Child4 /> */}

@@ -1,7 +1,7 @@
 const toString = (object: unknown) => Object.prototype.toString.call(object)
-declare const storageType: ["localStorage", "sessionStorage"];
+declare const storageType: ['localStorage', 'sessionStorage']
 export type Persist = {
-  key: string;
+  key: string
   storage?: typeof storageType[number]
 }
 
@@ -73,8 +73,7 @@ export function getStorage(persist: Persist): Record<string, any> | null {
     if (local) {
       return JSON.parse(local)
     }
-  } catch (_) {
-  }
+  } catch (_) {}
   return null
 }
 
@@ -85,12 +84,11 @@ export function setStorage(persist: Persist, val: string): void {
   }
   try {
     storage.setItem(persist.key, val)
-  } catch (_) {
-  }
+  } catch (_) {}
 }
 
 export function updateState(initState: Record<string, any>, store: Record<string, any>): void {
-  Object.keys(initState).forEach(key => {
+  Object.keys(initState).forEach((key) => {
     initState[key] = store[key]
   })
 }
