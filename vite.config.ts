@@ -26,7 +26,7 @@ export default defineConfig({
       name: 'react-pinia',
       fileName: 'react-pinia',
       // 输出格式
-      formats: ['umd'],
+      formats: ['umd', 'es'],
     },
     outDir,
   },

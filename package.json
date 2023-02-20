@@ -3,6 +3,7 @@
   "version": "2.5.0",
   "description": "🍍构建react极简状态管理且可配置持久化数据",
   "main": "lib/react-pinia.umd.js",
+  "module": "lib/react-pinia.es.js",
   "types": "types/index.d.ts",
   "scripts": {
     "dev": "vite",
