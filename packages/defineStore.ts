@@ -12,9 +12,16 @@ export interface createStoreOption {
   // 监听状态更新生成新的状态
   getters?: Record<string, (state: Record<string, any>) => any>
   // 是否开启缓存持久化数据
-  persist?: Persist,
+  persist?: Persist
   deep?: boolean // 是否深度监听数据
 }
+/**
+ * defineStore
+ * @param createStoreOption
+ * @returns Record<string, any>
+ * @author tcly861204
+ * @github https://github.com/tcly861204
+ */
 export const defineStore = (options: createStoreOption) => {
   const persist = options.persist
   const bus = mitt()

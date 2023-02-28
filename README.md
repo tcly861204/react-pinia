@@ -36,8 +36,8 @@ const home: createStoreOption = {
   // 是否持久化数据
   persist: {
     key: 'home',
-    storage: 'localStorage' // 'localStorage' | 'sessionStorage' 默认使用localStorage
-  }
+    storage: 'localStorage', // 'localStorage' | 'sessionStorage' 默认使用localStorage
+  },
 }
 
 const about: createStoreOption = {
@@ -114,8 +114,9 @@ const useStore = defineStore({
   // 是否持久化数据
   persist: {
     key: 'user',
-    storage?: 'localStorage' // 'localStorage' | 'sessionStorage' 默认使用localStorage
-  }
+    storage: 'localStorage', // 'localStorage' | 'sessionStorage' 默认使用localStorage
+  },
+  deet: true,
 })
 ```
 

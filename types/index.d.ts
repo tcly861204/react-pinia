@@ -5,30 +5,61 @@ declare type Persist = {
 }
 
 interface createStoreOption {
-  // 定义状态
   state: () => Record<string, any>
-  // 修改状态
   actions?: Record<string, (this: Record<string, any>, ...args: any) => any>
-  // 监听状态更新生成新的状态
   getters?: Record<string, (state: Record<string, any>) => any>
-  // 是否开启缓存持久化数据
   persist?: Persist
-  // 是否深度监听数据
   deep?: boolean
 }
+/**
+ * defineStore
+ * @param createStoreOption
+ * @returns Record<string, any>
+ * @author tcly861204
+ * @github https://github.com/tcly861204
+ */
 declare const defineStore: (
   options: createStoreOption
 ) => (storeKey?: string | Array<string>) => Record<string, any>
 
-declare const version = '2.5.3'
+declare const version = '2.5.5'
 
 interface ProviderProps {
   store: Record<string, Record<string, any>>
   children: React.ReactNode
 }
+/**
+ * Provider
+ * @param ProviderProps
+ * @returns JSX.Element
+ * @author tcly861204
+ * @github https://github.com/tcly861204
+ */
 declare const Provider: ({ store, children }: ProviderProps) => JSX.Element
+/**
+ * defineModel
+ * @param createStoreOption
+ * @returns createStoreOption
+ * @author tcly861204
+ * @github https://github.com/tcly861204
+ */
 declare const defineModel: (options: createStoreOption) => createStoreOption
+/**
+ * createStore
+ * @param Record<string, createStoreOption>
+ * @returns Record<string, createStoreOption>
+ * @author tcly861204
+ * @github https://github.com/tcly861204
+ */
 declare const createStore: (options: Record<string, createStoreOption>) => Record<string, any>
+/**
+ * useStore
+ * @param string
+ * @param [string | Array<string>]
+ * @returns Record<string, createStoreOption>
+ * @author tcly861204
+ * @github https://github.com/tcly861204
+ */
 declare const useStore: (
   globalKey: string,
   storeKey?: string | Array<string>
