@@ -23,9 +23,6 @@ const store = createStore({
         this.info.email = '356671808@qq.com'
       },
     },
-    persist: {
-      key: 'home',
-    },
   },
   about: {
     state: () => {

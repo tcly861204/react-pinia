@@ -14,7 +14,7 @@ const Child2 = memo(() => {
       <p>email {home.info.email || ''}</p>
       <button
         onClick={() => {
-          home.add(1)
+          home.add(10)
         }}
       >
         修改

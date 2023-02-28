@@ -46,11 +46,12 @@ export function observer<T extends Record<string, any>>(
     },
     set(target, key, val) {
       if (target[key as string] === val) {
-        return Reflect.get(target, key)
+        return Reflect.set(target, key, val)
+      } else {
+        const ret = Reflect.set(target, key, val)
+        cb(key as string, storeKey)
+        return ret
       }
-      const ret = Reflect.set(target, key, val)
-      cb(key as string, storeKey)
-      return ret
     },
     deleteProperty(target, key) {
       const ret = Reflect.deleteProperty(target, key)
