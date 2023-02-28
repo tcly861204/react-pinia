@@ -40,7 +40,7 @@ export function observer<T extends Record<string, any>>(
   const proxy = new Proxy<T>(initialVal, {
     get(target, key, receiver) {
       const res = Reflect.get(target, key, receiver)
-      return typeOf(res) === 'object' || typeOf(res) === 'array'
+      return typeOf(res) === 'object'
         ? observer(storeKey, res, cb)
         : Reflect.get(target, key)
     },
