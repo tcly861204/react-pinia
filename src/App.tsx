@@ -1,4 +1,4 @@
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import Child from './Child'
 import { useStore, defineStore } from '../packages/main'
 const Child2 = memo(() => {
@@ -11,7 +11,7 @@ const Child2 = memo(() => {
       <p>doubleCount: {home.doubleCount}</p>
       <p>num: {about.num}</p>
       <p>{home.user}</p>
-      <p>email {home.info.email || ''}</p>
+      <p>info {JSON.stringify(home.info)}</p>
       <button
         onClick={() => {
           home.add(10)

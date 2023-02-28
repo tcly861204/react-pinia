@@ -28,7 +28,8 @@ const rawMap = new WeakMap()
 export function observer<T extends Record<string, any>>(
   storeKey: string | null,
   initialVal: T,
-  cb: (T: string, U: string | null) => void
+  cb: (T: string, U: string | null) => void,
+  deep = true
 ): T {
   const existingProxy = proxyMap.get(initialVal)
   if (existingProxy) {
@@ -39,9 +40,12 @@ export function observer<T extends Record<string, any>>(
   }
   const proxy = new Proxy<T>(initialVal, {
     get(target, key, receiver) {
+      if (!deep) {
+        return Reflect.get(target, key)
+      }
       const res = Reflect.get(target, key, receiver)
       return typeOf(res) === 'object'
-        ? observer(storeKey, res, cb)
+        ? observer(storeKey, res, cb, deep)
         : Reflect.get(target, key)
     },
     set(target, key, val) {

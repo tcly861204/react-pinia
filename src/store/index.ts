@@ -18,11 +18,17 @@ const store = createStore({
     },
     actions: {
       add(count) {
-        this.count += count
-        this.info.useName = 'cobill'
-        this.info.email = '356671808@qq.com'
+        // console.log(this.info)
+        // this.count += count
+        // this.info.useName = 'cobill'
+        this.info = {
+          useName: 'cobill',
+          password: '123456789',
+        }
+        // this.user = 'world'
       },
     },
+    deep: false
   },
   about: {
     state: () => {

@@ -12,7 +12,8 @@ export interface createStoreOption {
   // 监听状态更新生成新的状态
   getters?: Record<string, (state: Record<string, any>) => any>
   // 是否开启缓存持久化数据
-  persist?: Persist
+  persist?: Persist,
+  deep?: boolean // 是否深度监听数据
 }
 export const defineStore = (options: createStoreOption) => {
   const persist = options.persist
@@ -22,7 +23,7 @@ export const defineStore = (options: createStoreOption) => {
   // 读取缓存
   const initState = (persist && getStorage(persist)) || options.state()
   const actionKeys: string[] = []
-  const _store = observer(null, initState, callback)
+  const _store = observer(null, initState, callback, 'deep' in options ? options.deep : true)
   function callback(id: string) {
     bus.emit('local', id)
   }
