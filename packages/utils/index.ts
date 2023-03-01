@@ -44,12 +44,11 @@ export function observer<T extends Record<string, any>>(
         return Reflect.get(target, key)
       }
       const res = Reflect.get(target, key, receiver)
-      return typeOf(res) === 'object'
-        ? observer(storeKey, res, cb, deep)
-        : Reflect.get(target, key)
+      return typeOf(res) === 'object' ? observer(storeKey, res, cb, deep) : Reflect.get(target, key)
     },
     set(target, key, val) {
       if (target[key as string] === val) {
+        // 当更新的值不变的时候
         return Reflect.set(target, key, val)
       } else {
         const ret = Reflect.set(target, key, val)
