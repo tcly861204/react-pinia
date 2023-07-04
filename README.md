@@ -141,7 +141,7 @@ export default Child
 
 开源不易, 有了您的赞助, 我们会做的更好 👋
 
-<img style="display: block;" src="https://tcly861204.github.io/static/wepay.jpg" width="180px" />
+<img style="display: block;" src="https://tcly861204.github.io/static/wepay.jpg" width="240px" />
 
 ## 技术反馈和交流群 | Technical feedback and communication
 
