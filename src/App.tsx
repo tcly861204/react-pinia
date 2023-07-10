@@ -1,4 +1,4 @@
-import { memo, useEffect } from 'react'
+import { memo } from 'react'
 import Child from './Child'
 import { useStore, defineStore } from '../packages/main'
 const Child2 = memo(() => {
@@ -53,7 +53,7 @@ const useChildStore = defineStore({
   },
 })
 
-const Child4 = () => {
+const Child4 = memo(() => {
   const { count, user, add } = useChildStore()
   console.log('rendering child4')
   return (
@@ -63,16 +63,27 @@ const Child4 = () => {
       <button onClick={add}>添加</button>
     </section>
   )
-}
+})
+
+const Child5 = memo(() => {
+  const { count, user } = useChildStore()
+  console.log('rendering child5')
+  return (
+    <section>
+      <p>child5: {count}</p>
+      <p>user: {user}</p>
+    </section>
+  )
+})
 
 const App = () => {
   return (
     <section>
+      <Child />
       <Child2 />
-      {/* <Child /> */}
-      {/* <Child2 />
       <Child3 />
-      <Child4 /> */}
+      <Child4 />
+      <Child5 />
     </section>
   )
 }
