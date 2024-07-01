@@ -3,8 +3,10 @@ import { defineStore } from '../packages/main'
 const useStore = defineStore({
   state: () => {
     return {
+      a: 1,
+      b: 2,
       count: 1,
-      user: 'hello',
+      user: 'hello'
     }
   },
   getters: {
@@ -15,6 +17,8 @@ const useStore = defineStore({
   actions: {
     add() {
       this.count += 1
+      this.a += 2
+      this.b += 3
     },
     changeUser() {
       this.user = 'zhangsan'
