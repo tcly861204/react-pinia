@@ -15,8 +15,8 @@ export interface createStoreOption<T>{
   deep?: boolean // 是否深度监听数据
 }
 /**
- * defineStore
- * @param createStoreOption
+ * defineStore<T>
+ * @param options createStoreOption<T>
  * @returns Record<string, any>
  * @author tcly861204
  * @github https://github.com/tcly861204

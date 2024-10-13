@@ -3,8 +3,8 @@ import Child from './Child'
 import { useStore, defineStore } from '../packages/main'
 import { State } from './store/createStore'
 const Child2 = memo(() => {
-  const home = useStore<State>('home')
-  const about = useStore<State>('about')
+  const home = useStore<State, 'home'>('home')
+  const about = useStore<State, 'about'>('about')
   console.log('rendeirng child2')
   return (
     <section>
@@ -25,12 +25,12 @@ const Child2 = memo(() => {
 })
 
 const Child3 = memo(() => {
-  const about = useStore('about')
+  const about = useStore<State, 'about'>('about')
   console.log('rendeirng child3')
   return (
     <section>
       <p>about: {about.num}</p>
-      <button onClick={() => (about.num += 1)}>修改</button>
+      <button onClick={() => about.num = about.num + 1}>修改</button>
     </section>
   )
 })

@@ -22,7 +22,6 @@ export interface State {
   home: HomeState,
   about: AboutState
 }
-
 const store = createStore<State>({
   home: {
     state: () => {

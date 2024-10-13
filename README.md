@@ -13,44 +13,67 @@
 定义数据源
 
 ```ts
-import { createStore, createStoreOption } from 'react-pinia'
-
-const home: createStoreOption = {
-  state: () => {
-    return {
-      count: 1,
-      user: 'hello world',
-    }
+import { createStore } from 'react-pinia'
+type HomeState ={
+  count: number
+  user: string
+  info: {
+    useName: string
+    password: string
   },
   getters: {
-    doubleCount: (state) => {
-      return state.count * 2
-    },
+    doubleCount: number
   },
   actions: {
-    add() {
-      this.count += 1
-      console.log(this)
+    add: (count: number) => void
+  }
+}
+type AboutState = {
+  num: number
+}
+
+export interface State {
+  home: HomeState,
+  about: AboutState
+}
+const store = createStore<State>({
+  home: {
+    state: () => {
+      return {
+        count: 1,
+        user: 'hello',
+        info: {
+          useName: 'admin',
+          password: '123456',
+        },
+      }
+    },
+    getters: {
+      doubleCount: (state) => {
+        return state.count * 2
+      },
+    },
+    actions: {
+      add(count) {
+        console.log(this.info)
+        // this.count += count
+        // this.info.useName = 'cobill'
+        this.info = {
+          useName: 'cobill',
+          password: '123456789',
+        }
+        // this.user = 'world'
+      },
+    },
+    deep: false
+  },
+  about: {
+    state: () => {
+      return {
+        num: 1,
+      }
     },
   },
-  // 是否持久化数据
-  persist: {
-    key: 'home',
-    storage: 'localStorage', // 'localStorage' | 'sessionStorage' 默认使用localStorage
-  },
-}
-
-const about: createStoreOption = {
-  state: () => {
-    return {
-      num: 1,
-    }
-  },
-}
-
-const store = createStore({
-  home,
-  about,
 })
 
 export default store
@@ -73,8 +96,10 @@ ReactDOM.render(
 
 ```ts
 import { useStore } from 'react-pinia'
+// 导入全局定义的类型
+import { State } from '@/store/global'
 const App = memo(() => {
-  const home = useStore('home')
+  const home = useStore<State, 'home'>('home')
   return (
     <section>
       <p>count: {home.count}</p>
@@ -94,7 +119,19 @@ export default App
 ```ts
 // 定义数据源
 import { defineStore } from 'react-pinia'
-const useStore = defineStore({
+
+type State = {
+  count: number
+  user: string
+  getters: {
+    doubleCount: number
+  }
+  actions: {
+    add: () => void
+  }
+}
+
+const useStore = defineStore<State>({
   state: () => {
     return {
       count: 1,
