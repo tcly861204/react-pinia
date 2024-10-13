@@ -1,7 +1,7 @@
 import ReactDOM from 'react-dom'
 import App from './App'
 import { Provider } from '../packages/main'
-import store from './store'
+import store from './store/createStore'
 let root = document.querySelector('#root')
 
 ReactDOM.render(

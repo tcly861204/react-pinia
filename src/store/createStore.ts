@@ -1,5 +1,29 @@
 import { createStore } from '../../packages/main'
-const store = createStore({
+
+export type HomeState ={
+  count: number
+  user: string
+  info: {
+    useName: string
+    password: string
+  },
+  getters: {
+    doubleCount: number
+  },
+  actions: {
+    add: (count: number) => void
+  }
+}
+export type AboutState = {
+  num: number
+}
+
+export interface State {
+  home: HomeState,
+  about: AboutState
+}
+
+const store = createStore<State>({
   home: {
     state: () => {
       return {
@@ -18,7 +42,7 @@ const store = createStore({
     },
     actions: {
       add(count) {
-        // console.log(this.info)
+        console.log(this.info)
         // this.count += count
         // this.info.useName = 'cobill'
         this.info = {

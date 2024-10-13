@@ -4,10 +4,12 @@ export * from './defineStore'
 import { defineStore, createStoreOption } from './defineStore'
 
 const Context = createContext({})
-const globalStoreCache: Record<string, any> = {}
+const globalStoreCache: {
+  [key: keyof ReturnType<typeof createStore>]: any
+} = {}
 
 export interface ProviderProps {
-  store: Record<string, Record<string, any>>
+  store: ReturnType <typeof createStore>
   children: React.ReactNode
 }
 /**
@@ -31,7 +33,7 @@ export const Provider = ({ store, children }: ProviderProps): JSX.Element => {
  * @author tcly861204
  * @github https://github.com/tcly861204
  */
-export const defineModel = (options: createStoreOption): createStoreOption => {
+export const defineModel = <T extends Record<string, any>>(options: createStoreOption<T>): createStoreOption<T> => {
   return options
 }
 /**
@@ -41,12 +43,19 @@ export const defineModel = (options: createStoreOption): createStoreOption => {
  * @author tcly861204
  * @github https://github.com/tcly861204
  */
-export const createStore = (options: Record<string, createStoreOption>) => {
-  Object.keys(options).map((key) => {
-    globalStoreCache[key] = defineStore(options[key])
+export const createStore = <T extends {[K in keyof T]: T[K]}>(options: {
+  [K in keyof T]: createStoreOption<T[K]>
+}) => {
+  Object.keys(options).forEach(key => {
+    if (!(key in globalStoreCache)) {
+      globalStoreCache[key] = defineStore(options[key as keyof T])
+    }
   })
-  return globalStoreCache
+  return globalStoreCache as {
+    [K in keyof T]: T[K] extends { getters: infer G, actions: infer A } ? Omit<T[K], 'getters' | 'actions'> & G & A : Omit<T[K], 'getters' | 'actions'>
+  }
 }
+
 /**
  * useStore
  * @param string
@@ -55,15 +64,12 @@ export const createStore = (options: Record<string, createStoreOption>) => {
  * @author tcly861204
  * @github https://github.com/tcly861204
  */
-export const useStore = (globalKey: string, storeKey?: string | Array<string>) => {
-  const store = useContext(Context) as Record<
-    string,
-    (storeKey?: string | Array<string>) => Record<string, any>
-  >
-  if (globalKey in store) {
-    return store[globalKey](storeKey)
+export const useStore = <T extends {[K in keyof T]: T[K]}>
+  (globalKey: keyof T, storeKey?: string | Array<string>) => {
+  const store = useContext(Context) as {
+    [K in keyof T]: (storeKey?: string | Array<string>) => any
   }
-  return {}
+  return store[globalKey](storeKey)
 }
 
 export * from './version'

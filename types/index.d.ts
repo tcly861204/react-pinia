@@ -5,7 +5,7 @@ declare type Persist = {
 }
 
 interface createStoreOption {
-  state: () => Record<string, any>
+  state: <T extends Record<string, any>>() => T
   actions?: Record<string, (this: Record<string, any>, ...args: any) => any>
   getters?: Record<string, (state: Record<string, any>) => any>
   persist?: Persist

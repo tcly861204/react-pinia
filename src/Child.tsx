@@ -1,8 +1,8 @@
-import useStore from './useStore'
+import useStore from './store/useStore'
 import { memo } from 'react'
 const Child = memo(() => {
   const store = useStore()
-  console.log(store)
+  console.log(store.doubleCount)
   console.log('rendering child')
   return (
     <section>
