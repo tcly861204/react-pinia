@@ -1,6 +1,6 @@
 {
   "name": "react-pinia",
-  "version": "2.5.6",
+  "version": "2.5.7",
   "description": "🍍构建react极简状态管理且可配置持久化数据",
   "main": "lib/react-pinia.umd.js",
   "module": "lib/react-pinia.es.js",
@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "vite",
     "types": "tsup packages/main.tsx --dts",
-    "prebuild": "node build/version.js",
+    "prebuild": "node build/version.js && npm run types",
     "build": "tsc && vite build",
     "postbuild": "node build/index.js",
     "preview": "vite preview"

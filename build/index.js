@@ -8,3 +8,5 @@ fs.writeFileSync(
   JSON.stringify(pkg, null, 2),
   'utf8',
 );
+const types = fs.readFileSync(path.resolve(__dirname, '../dist/main.d.ts'), "utf8")
+fs.writeFileSync(path.resolve(__dirname, '../types/index.d.ts'), types, 'utf8')

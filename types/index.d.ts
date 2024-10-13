@@ -24,7 +24,7 @@ declare const defineStore: <T>(options: createStoreOption<T>) => (storeKey?: str
     actions: infer G_1;
 } ? G_1 : {});
 
-declare const version = "2.5.6";
+declare const version = "2.5.7";
 
 interface ProviderProps {
     store: ReturnType<typeof createStore>;
