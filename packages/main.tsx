@@ -78,7 +78,8 @@ export const useStore = <T extends {[K in keyof T]: T[K]}, K extends keyof T>(
   const store = useContext(Context) as {
     [K in keyof T]: (storeKey?: string | Array<string>) => State extends { getters: infer G, actions: infer A } ? Omit<State, 'getters' | 'actions'> & G & A : Omit<State, 'getters' | 'actions'>
   }
-  return store[globalKey](storeKey)
+  if (globalKey in store) return store[globalKey](storeKey)
+  return null
 }
 
 export * from './version'
