@@ -99,7 +99,7 @@ import { useStore } from 'react-pinia'
 // 导入全局定义的类型
 import { State } from '@/store/global'
 const App = memo(() => {
-  const home = useStore<State, 'home'>('home')
+  const home = useStore<State, 'home'>('home')! // 这里需要传入泛型，并且断言
   return (
     <section>
       <p>count: {home.count}</p>
