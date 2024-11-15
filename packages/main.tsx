@@ -41,7 +41,7 @@ export const defineModel = <T extends Record<string, any>>(options: createStoreO
     [K in keyof T]: createStoreOption<T[K]>
   }
  * @returns {
-      [K in keyof T]: T[K] extends { getters: infer G, actions: infer A } ? Omit<T[K], 'getters' | 'actions'> & G & A : Omit<T[K], 'getters' | 'actions'>
+      [K in keyof T]: T[K] extends { getters: infer G, actions: infer A } ? State<T[K]> & G & A : State<T[K]>
     }
  * @author tcly861204
  * @github https://github.com/tcly861204
@@ -65,7 +65,7 @@ export const createStore = <T extends {[K in keyof T]: T[K]}>(options: {
  * useStore<T extends {[K in keyof T]: T[K]}, K extends keyof T>
  * @param globalKey: K
  * @param storeKey?: string | Array<string>
- * @returns T[K] extends { getters: infer G, actions: infer A } ? Omit<T[K], 'getters' | 'actions'> & G & A : Omit<T[K], 'getters' | 'actions'>
+ * @returns T[K] extends { getters: infer G, actions: infer A } ? State<T[K]> & G & A : State<T[K]>
  * @author tcly861204
  * @github https://github.com/tcly861204
  */

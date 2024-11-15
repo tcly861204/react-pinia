@@ -39,7 +39,8 @@ const useStore = defineStore<initState>({
     },
   },
   persist: {
-    key: 'home'
+    key: 'home',
+    storage: 'localStorage',
   }
 })
 export default useStore
