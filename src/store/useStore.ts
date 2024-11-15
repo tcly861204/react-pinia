@@ -35,7 +35,7 @@ const useStore = defineStore<initState>({
       this.b += 3
     },
     changeUser() {
-      this.user = 'zhangsan'
+      this.user = '李四'
     },
   },
   persist: {

@@ -1,8 +1,7 @@
 import { useRef, createContext, useContext } from 'react'
 import { useCreation } from './hooks/index'
 export * from './defineStore'
-import { defineStore, createStoreOption } from './defineStore'
-
+import { State, defineStore, createStoreOption } from './defineStore'
 const Context = createContext({})
 const globalStoreCache: {
   [key: keyof ReturnType<typeof createStore>]: unknown
@@ -50,7 +49,7 @@ export const defineModel = <T extends Record<string, any>>(options: createStoreO
 export const createStore = <T extends {[K in keyof T]: T[K]}>(options: {
   [K in keyof T]: createStoreOption<T[K]>
 }): {
-  [K in keyof T]: T[K] extends { getters: infer G, actions: infer A } ? Omit<T[K], 'getters' | 'actions'> & G & A : Omit<T[K], 'getters' | 'actions'>
+  [K in keyof T]: T[K] extends { getters: infer G, actions: infer A } ? State<T[K]> & G & A : State<T[K]>
 } => {
   Object.keys(options).forEach(key => {
     if (!(key in globalStoreCache)) {
@@ -58,7 +57,7 @@ export const createStore = <T extends {[K in keyof T]: T[K]}>(options: {
     }
   })
   return globalStoreCache as {
-    [K in keyof T]: T[K] extends { getters: infer G, actions: infer A } ? Omit<T[K], 'getters' | 'actions'> & G & A : Omit<T[K], 'getters' | 'actions'>
+    [K in keyof T]: T[K] extends { getters: infer G, actions: infer A } ? State<T[K]> & G & A : State<T[K]>
   }
 }
 
@@ -74,9 +73,9 @@ export const useStore = <T extends {[K in keyof T]: T[K]}, K extends keyof T>(
     globalKey: K,
     storeKey?: string | Array<string>
   ) => {
-  type State = T[K]
+  type GlobalItemState = T[K]
   const store = useContext(Context) as {
-    [K in keyof T]: (storeKey?: string | Array<string>) => State extends { getters: infer G, actions: infer A } ? Omit<State, 'getters' | 'actions'> & G & A : Omit<State, 'getters' | 'actions'>
+    [K in keyof T]: (storeKey?: string | Array<string>) => GlobalItemState extends { getters: infer G, actions: infer A } ? State<GlobalItemState> & G & A : State<GlobalItemState>
   }
   if (globalKey in store) return store[globalKey](storeKey)
   return null

@@ -3,13 +3,14 @@ import { useEffect } from 'react'
 import { useUpdate } from './hooks/index'
 import { typeOf, observer, getStorage, setStorage, updateState } from './utils/index'
 import { type Persist } from './utils/index'
+export type State<T> = Omit<T, 'actions' | 'getters'>;
 export interface createStoreOption<T>{
   // 定义状态
-  state: () => Omit<T, 'actions' | 'getters'>
+  state: () => State<T>
   // 修改状态
-  actions?: Record<string, (this: Omit<T, 'actions' | 'getters'>, ...args: any) => any>
+  actions?: Record<string, (this: State<T>, ...args: unknown[]) => unknown>
   // 监听状态更新生成新的状态
-  getters?: Record<string, (state: Omit<T, 'actions' | 'getters'>) => any>
+  getters?: Record<string, (state: State<T>) => unknown>
   // 是否开启缓存持久化数据
   persist?: Persist
   deep?: boolean // 是否深度监听数据
@@ -17,7 +18,7 @@ export interface createStoreOption<T>{
 /**
  * defineStore<T>
  * @param options createStoreOption<T>
- * @returns Record<string, any>
+ * @returns Record<string, unknown>
  * @author tcly861204
  * @github https://github.com/tcly861204
  */
@@ -35,7 +36,7 @@ export const defineStore = <T>(options: createStoreOption<T>) => {
   function callback(id: string) {
     bus.emit('local', id)
   }
-  const updateGetters = (store: Omit<T, 'actions' | 'getters'>) => {
+  const updateGetters = (store: State<T>) => {
     try {
       Object.keys(options.getters!).map((key) => {
         _store[key] = options.getters && options.getters[key](store)
@@ -49,7 +50,7 @@ export const defineStore = <T>(options: createStoreOption<T>) => {
       return key
     })
   }
-  updateGetters(initState as Omit<T, 'actions' | 'getters'>)
+  updateGetters(initState as State<T>)
   return (storeKey?: string | Array<string>) => {
     const update = useUpdate()
     const store = _store
@@ -78,6 +79,6 @@ export const defineStore = <T>(options: createStoreOption<T>) => {
       }
     }, [])
     // 修复类型约束错误
-    return store as Omit<T, 'actions' | 'getters'> & GettersType & actionType
+    return store as State<T> & GettersType & actionType
   }
 }

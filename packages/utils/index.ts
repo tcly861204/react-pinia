@@ -1,8 +1,17 @@
+import type { DependencyList } from 'react'
 const toString = (object: unknown) => Object.prototype.toString.call(object)
 declare const storageType: ['localStorage', 'sessionStorage']
 export type Persist = {
   key: string
   storage?: typeof storageType[number]
+}
+
+export const depsAreSame = (oldDeps: DependencyList, deps: DependencyList): boolean => {
+  if (oldDeps === deps) return true
+  for (let i = 0; i < oldDeps.length; i++) {
+    if (!Object.is(oldDeps[i], deps[i])) return false
+  }
+  return true
 }
 
 export const typeOf = (value: unknown) => {
@@ -44,7 +53,7 @@ export function observer<T extends Record<string, any>>(
         return Reflect.get(target, key)
       }
       const res = Reflect.get(target, key, receiver)
-      return typeOf(res) === 'object' ? observer(storeKey, res, cb, deep) : Reflect.get(target, key)
+      return (typeOf(res) === 'object' || typeOf(res) === 'array') ? observer(storeKey, res, cb, deep) : Reflect.get(target, key)
     },
     set(target, key, val) {
       if (target[key as string] === val) {
