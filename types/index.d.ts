@@ -10,7 +10,7 @@ type Getters<T> = T extends {
 type Actions<T> = T extends {
     actions: infer G;
 } ? G : {};
-interface StoreOption<T> {
+interface StateOption<T> {
     state: () => State<T>;
     actions?: {
         [key: string]: (this: State<T>, ...args: unknown[]) => unknown;
@@ -22,14 +22,14 @@ interface StoreOption<T> {
     deep?: boolean;
 }
 
-declare function defineStore<T>(options: StoreOption<T>): () => State<T> & Getters<T> & Actions<T>;
+declare function defineStore<T>(options: StateOption<T>): () => State<T> & Getters<T> & Actions<T>;
 
 interface ProviderProps {
     store: ReturnType<typeof createStore>;
     children: React.ReactNode;
 }
 declare const Provider: ({ store, children }: ProviderProps) => JSX.Element;
-declare const createStore: <T extends { [K in keyof T]: T[K]; }>(options: { [K_1 in keyof T]: StoreOption<T[K_1]>; }) => {
+declare const createStore: <T extends { [K in keyof T]: T[K]; }>(options: { [K_1 in keyof T]: StateOption<T[K_1]>; }) => {
     [key: string]: () => State<unknown>;
 };
 declare const useStore: <T extends { [K in keyof T]: T[K]; }, K_1 extends keyof T>(globalKey: K_1) => (State<T[K_1]> & Getters<T[K_1]> & Actions<T[K_1]>) | null;
