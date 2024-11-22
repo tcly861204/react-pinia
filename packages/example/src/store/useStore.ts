@@ -1,13 +1,13 @@
-import { defineStore } from '../../pinia/main'
+import { defineStore } from 'react-pinia'
 
 interface initState {
   a: number
   b: number
   count: number
-  user: string,
+  user: string
   getters: {
     doubleCount: number
-  },
+  }
   actions: {
     add: () => void
     changeUser: () => void
@@ -20,7 +20,7 @@ const useStore = defineStore<initState>({
       a: 1,
       b: 2,
       count: 1,
-      user: 'hello'
+      user: 'hello',
     }
   },
   getters: {
@@ -41,6 +41,6 @@ const useStore = defineStore<initState>({
   persist: {
     key: 'home',
     storage: 'localStorage',
-  }
+  },
 })
 export default useStore

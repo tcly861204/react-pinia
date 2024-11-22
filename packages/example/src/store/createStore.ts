@@ -1,15 +1,15 @@
-import { createStore } from '../../pinia/main'
+import { createStore } from 'react-pinia'
 
-export type HomeState ={
+export type HomeState = {
   count: number
   user: string
   info: {
     useName: string
     password: string
-  },
+  }
   getters: {
     doubleCount: number
-  },
+  }
   actions: {
     add: (count: number) => void
   }
@@ -19,7 +19,7 @@ export type AboutState = {
 }
 
 export interface State {
-  home: HomeState,
+  home: HomeState
   about: AboutState
 }
 const store = createStore<State>({
@@ -51,7 +51,7 @@ const store = createStore<State>({
         // this.user = 'world'
       },
     },
-    deep: false
+    deep: false,
   },
   about: {
     state: () => {

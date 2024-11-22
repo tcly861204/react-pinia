@@ -1,0 +1,12 @@
+src
+node_modules/
+.github
+package-lock.json
+dist
+.babelrc
+tsconfig.json
+tsconfig.node.json
+build
+vite.config.ts
+index.html
+pinia

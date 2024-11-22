@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import App from './App'
-import { Provider } from '../pinia/main'
+import { Provider } from 'react-pinia'
 import store from './store/createStore'
 let root = document.querySelector('#root')
 ReactDOM.render(
