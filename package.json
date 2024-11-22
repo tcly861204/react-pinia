@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm -F react-example run dev",
-    "build": "pnpm -F react-pinia run dev"
+    "build": "pnpm -F react-pinia run build"
   },
   "keywords": [
     "react",
