@@ -2,7 +2,7 @@
 
 🍍 构建 react 极简状态管理
 
-<a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.0.1732247761396" alt="npm package"></a>
+<a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.1.1732283125727" alt="npm package"></a>
 
 ## 安装
 
@@ -14,16 +14,16 @@
 
 ```ts
 import { createStore } from 'react-pinia'
-type HomeState ={
+type HomeState = {
   count: number
   user: string
   info: {
     useName: string
     password: string
-  },
+  }
   getters: {
     doubleCount: number
-  },
+  }
   actions: {
     add: (count: number) => void
   }
@@ -33,7 +33,7 @@ type AboutState = {
 }
 
 export interface State {
-  home: HomeState,
+  home: HomeState
   about: AboutState
 }
 const store = createStore<State>({
@@ -65,7 +65,7 @@ const store = createStore<State>({
         // this.user = 'world'
       },
     },
-    deep: false
+    deep: false,
   },
   about: {
     state: () => {
@@ -161,13 +161,21 @@ const useStore = defineStore<State>({
 // 使用数据源
 import { memo } from 'react'
 import useStore from './useStore'
+
+// 外部直接使用
+const state = useStore().get()
+
 const Child = memo(() => {
-  const { count, doubleCount, add } = useStore('count')
+  const { count, doubleCount, add } = useStore()
+  const onClick = () => {
+    state.count = state.count + 1
+  }
   return (
     <section>
       <p>{count}</p>
       <p>{doubleCount}</p>
       <button onClick={add}>累加</button>
+      <button onClick={onClick}>外部修改</button>
     </section>
   )
 })
