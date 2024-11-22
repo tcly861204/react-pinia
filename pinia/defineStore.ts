@@ -28,7 +28,7 @@ export function defineStore<T>(options: StateOption<T>) {
     }
   }
   updateGetters(initState)
-  return () => {
+  function useHooks() {
     const update = useUpdate()
     useEffect(() => {
       bus.on(uid, () => {
@@ -42,4 +42,8 @@ export function defineStore<T>(options: StateOption<T>) {
     }, [])
     return _store as State<T> & Getters<T> & Actions<T>
   }
+  useHooks.get = function () {
+    return proxyState
+  }
+  return useHooks
 }

@@ -23,7 +23,7 @@ export const createStore = <T extends { [K in keyof T]: T[K] }>(options: {
 }) => {
   const store = Object.create(null)
   Object.keys(options).forEach((key) => {
-    if (!store.has(key)) {
+    if (!(key in store)) {
       store[key] = defineStore(options[key as keyof T])
     }
   })

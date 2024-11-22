@@ -30,7 +30,7 @@ const Child3 = memo(() => {
   return (
     <section>
       <p>about: {about.num}</p>
-      <button onClick={() => about.num = about.num + 1}>修改</button>
+      <button onClick={() => (about.num = about.num + 1)}>修改</button>
     </section>
   )
 })
@@ -63,6 +63,9 @@ const useChildStore = defineStore<{
   },
 })
 
+const state = useChildStore.get()
+// state.count += 1
+
 const Child4 = memo(() => {
   const { count, user, add } = useChildStore()
   console.log('rendering child4')
@@ -71,6 +74,7 @@ const Child4 = memo(() => {
       <p>child4: {count}</p>
       <p>user: {user}</p>
       <button onClick={add}>添加</button>
+      <button onClick={() => (state.count = state.count + 1)}>外部修改</button>
     </section>
   )
 })
