@@ -1,4 +1,4 @@
-import { defineStore } from '../../packages/main'
+import { defineStore } from '../../pinia/main'
 
 interface initState {
   a: number

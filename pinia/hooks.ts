@@ -1,6 +1,6 @@
+import { useState, useCallback, useRef } from 'react'
 import type { DependencyList } from 'react'
-import { useCallback, useState, useRef } from 'react'
-import { depsAreSame } from '../utils/index'
+import { depsAreSame } from './utils'
 
 export function useUpdate() {
   const [, setState] = useState({})

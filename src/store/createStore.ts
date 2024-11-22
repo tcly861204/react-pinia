@@ -1,4 +1,4 @@
-import { createStore } from '../../packages/main'
+import { createStore } from '../../pinia/main'
 
 export type HomeState ={
   count: number

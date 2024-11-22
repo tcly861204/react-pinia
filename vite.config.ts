@@ -1,7 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 const path = require('path')
-const entryDir = path.resolve(__dirname, 'packages')
+const entryDir = path.resolve(__dirname, 'pinia')
 const outDir = path.resolve(__dirname, 'lib')
 export default defineConfig({
   plugins: [react()],
@@ -21,7 +21,7 @@ export default defineConfig({
     },
     lib: {
       // 入口
-      entry: path.resolve(entryDir, 'main.tsx'),
+      entry: path.resolve(entryDir, 'main.ts'),
       // 组件库名字
       name: 'react-pinia',
       fileName: 'react-pinia',

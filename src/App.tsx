@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import Child from './Child'
-import { useStore, defineStore } from '../packages/main'
+import { useStore, defineStore } from '../pinia/main'
 import { State } from './store/createStore'
 const Child2 = memo(() => {
   const home = useStore<State, 'home'>('home')!

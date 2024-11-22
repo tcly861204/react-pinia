@@ -9,4 +9,4 @@ tsconfig.node.json
 build
 vite.config.ts
 index.html
-packages
+pinia
