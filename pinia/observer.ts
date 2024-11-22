@@ -20,7 +20,9 @@ export function observer<T extends Record<string, any>>(
         return Reflect.get(target, key)
       }
       const res = Reflect.get(target, key, receiver)
-      return (typeOf(res) === 'object' || typeOf(res) === 'array') ? observer(storeKey, res, cb, deep) : Reflect.get(target, key)
+      return typeOf(res) === 'object' || typeOf(res) === 'array'
+        ? observer(storeKey, res, cb, deep)
+        : Reflect.get(target, key)
     },
     set(target, key, val) {
       if (target[key as string] === val) {
