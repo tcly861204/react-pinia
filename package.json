@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "pnpm -F react-example run dev",
-    "build": "pnpm -F react-pinia run build"
+    "build": "pnpm -F react-pinia run build",
+    "publish": "bash publish.sh"
   },
   "keywords": [
     "react",
