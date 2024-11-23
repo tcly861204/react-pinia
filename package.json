@@ -2,7 +2,7 @@
   "name": "monorepo-react-pinia",
   "version": "1.0.0",
   "private": true,
-  "description": "🍍构建react极简状态管理且可配置持久化数据",
+  "description": "🍍Building a Minimal State Management for React",
   "type": "module",
   "scripts": {
     "dev": "pnpm -F react-example run dev",

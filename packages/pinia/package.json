@@ -1,7 +1,7 @@
 {
   "name": "react-pinia",
   "version": "2.7.2",
-  "description": "🍍构建react极简状态管理且可配置持久化数据",
+  "description": "🍍Building a Minimal State Management for React",
   "main": "./src/main.ts",
   "module": "./src/main.ts",
   "types": "types/index.d.ts",
