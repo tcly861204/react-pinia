@@ -2,16 +2,9 @@
   "name": "react-pinia",
   "version": "2.7.2",
   "description": "🍍构建react极简状态管理且可配置持久化数据",
-  "main": "./src/main.ts",
-  "module": "./src/main.ts",
+  "main": "lib/react-pinia.umd.js",
+  "module": "lib/react-pinia.es.js",
   "types": "types/index.d.ts",
-  "scripts": {
-    "types": "tsup src/main.ts --dts",
-    "prebuild": "node build/version.js && npm run types",
-    "build": "tsc && vite build",
-    "postbuild": "node build/index.js",
-    "preview": "vite preview"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tcly861204/react-pinia.git"
@@ -39,17 +32,6 @@
     "url": "https://github.com/tcly861204/react-pinia/issues"
   },
   "homepage": "https://github.com/tcly861204/react-pinia#readme",
-  "devDependencies": {
-    "@types/node": "^18.0.6",
-    "@types/react": "^17.0.0",
-    "@types/react-dom": "^17.0.0",
-    "@vitejs/plugin-react": "^1.3.0",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "tsup": "^6.6.3",
-    "typescript": "^4.6.3",
-    "vite": "^2.9.9"
-  },
   "peerDependencies": {
     "react": ">=16.12.0",
     "react-dom": ">=16.12.0"

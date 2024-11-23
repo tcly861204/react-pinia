@@ -2,7 +2,7 @@
 
 🍍 构建 react 极简状态管理
 
-<a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.1.1732283125727" alt="npm package"></a>
+<a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.2.1732330226386" alt="npm package"></a>
 
 ## 安装
 

@@ -15,3 +15,4 @@ const newCode = code.replace(
   }
 )
 fs.writeFileSync(path.resolve(__dirname, '../README.md'), newCode, 'utf8')
+fs.writeFileSync(path.resolve(__dirname, '../../../README.md'), newCode, 'utf8')
