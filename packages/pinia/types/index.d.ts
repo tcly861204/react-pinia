@@ -40,6 +40,6 @@ declare const createStore: <T extends { [K in keyof T]: T[K]; }>(options: { [K_1
 };
 declare const useStore: <T extends { [K in keyof T]: T[K]; }, K_1 extends keyof T>(globalKey: K_1) => (State<T[K_1]> & Getters<T[K_1]> & Actions<T[K_1]>) | null;
 
-declare const version = "2.7.2";
+declare const version = "2.7.3";
 
 export { Provider, createStore, defineStore, useStore, version };

@@ -2,7 +2,7 @@
 
 🍍 Build minimal state management for React
 
-<a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.2.1732330226386" alt="npm package"></a>
+<a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.3.1732354909821" alt="npm package"></a>
 
 ## Installation
 
