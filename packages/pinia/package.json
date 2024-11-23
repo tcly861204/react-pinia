@@ -6,7 +6,7 @@
   "module": "./src/main.ts",
   "types": "types/index.d.ts",
   "scripts": {
-    "types": "tsup pinia/main.ts --dts",
+    "types": "tsup src/main.ts --dts",
     "prebuild": "node build/version.js && npm run types",
     "build": "tsc && vite build",
     "postbuild": "node build/index.js",
