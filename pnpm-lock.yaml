@@ -9,6 +9,10 @@ importers:
   .: {}
 
   packages/example:
+    dependencies:
+      react-router-dom:
+        specifier: ^6.28.0
+        version: 6.28.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2)
     devDependencies:
       '@types/node':
         specifier: ^18.0.6
@@ -353,6 +357,10 @@ packages:
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
+
+  '@remix-run/router@1.21.0':
+    resolution: {integrity: sha512-xfSkCAchbdG5PnbrKqFWwia4Bi61nH+wm8wLEqfHDyp7Y3dZzgqS2itV8i4gAq9pC2HsTpwyBC6Ds8VHZ96JlA==}
+    engines: {node: '>=14.0.0'}
 
   '@rollup/pluginutils@4.2.1':
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -875,6 +883,19 @@ packages:
     resolution: {integrity: sha512-XP8A9BT0CpRBD+NYLLeIhld/RqG9+gktUjW1FkE+Vm7OCinbG1SshcK5tb9ls4kzvjZr9mOQc7HYgBngEyPAXg==}
     engines: {node: '>=0.10.0'}
 
+  react-router-dom@6.28.0:
+    resolution: {integrity: sha512-kQ7Unsl5YdyOltsPGl31zOjLrDv+m2VcIEcIHqYYD3Lp0UppLjrzcfJqDJwXxFw3TH/yvapbnUvPlAj7Kx5nbg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+      react-dom: '>=16.8'
+
+  react-router@6.28.0:
+    resolution: {integrity: sha512-HrYdIFqdrnhDw0PqG/AKjAqEqM7AvxCz0DQ4h2W8k6nqmc5uRBYDag0SBxx9iYz5G8gnuNVLzUe13wl9eAsXXg==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      react: '>=16.8'
+
   react@17.0.2:
     resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
     engines: {node: '>=0.10.0'}
@@ -1317,6 +1338,8 @@ snapshots:
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
+
+  '@remix-run/router@1.21.0': {}
 
   '@rollup/pluginutils@4.2.1':
     dependencies:
@@ -1773,6 +1796,18 @@ snapshots:
       scheduler: 0.20.2
 
   react-refresh@0.13.0: {}
+
+  react-router-dom@6.28.0(react-dom@17.0.2(react@17.0.2))(react@17.0.2):
+    dependencies:
+      '@remix-run/router': 1.21.0
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-router: 6.28.0(react@17.0.2)
+
+  react-router@6.28.0(react@17.0.2):
+    dependencies:
+      '@remix-run/router': 1.21.0
+      react: 17.0.2
 
   react@17.0.2:
     dependencies:

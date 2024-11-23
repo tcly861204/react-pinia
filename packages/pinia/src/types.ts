@@ -15,7 +15,7 @@ export interface StateOption<T> {
   state: () => State<T>
   // 修改状态
   actions?: {
-    [key: string]: (this: State<T>, ...args: unknown[]) => unknown
+    [key: string]: (this: State<T>, ...args: any[]) => unknown
   }
   // 监听状态更新生成新的状态
   getters?: {

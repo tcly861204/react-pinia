@@ -18,11 +18,40 @@ export type AboutState = {
   num: number
 }
 
+export type UserState = {
+  username: string | null
+  password: string | null
+  actions: {
+    login: () => void
+  }
+}
+
 export interface State {
   home: HomeState
   about: AboutState
+  user: UserState
 }
 const store = createStore<State>({
+  user: {
+    state: () => {
+      return {
+        username: null,
+        password: null,
+      }
+    },
+    actions: {
+      login() {
+        const { username, password } = this
+        fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ username, password }),
+        })
+      },
+    },
+  },
   home: {
     state: () => {
       return {
@@ -40,15 +69,13 @@ const store = createStore<State>({
       },
     },
     actions: {
-      add(count) {
+      add(count: number) {
         console.log(this.info)
-        // this.count += count
-        // this.info.useName = 'cobill'
+        this.count = count
         this.info = {
           useName: 'cobill',
           password: '123456789',
         }
-        // this.user = 'world'
       },
     },
     deep: false,

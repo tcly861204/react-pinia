@@ -43,4 +43,5 @@ const useStore = defineStore<initState>({
     storage: 'localStorage',
   },
 })
+
 export default useStore
