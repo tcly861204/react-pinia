@@ -3,6 +3,19 @@
   padding: 0;
 }
 
+.flex-1 {
+  flex: 1;
+}
+
 fieldset {
   padding: 15px;
+  border-color: #ccc;
+  margin-bottom: 15px;
+}
+
+button {
+  padding: 3px 5px;
+  margin: 5px 10px 0 0;
+  font-size: 12px;
+  cursor: pointer;
 }

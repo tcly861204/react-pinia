@@ -15,7 +15,11 @@ const Layout = () => {
           <Link to='/'>useDefine</Link>
           <Link to='/global'>useGlobal</Link>
         </nav>
-        <div>{store?.username}</div>
+        <div className='flex-1'></div>
+        <div className={styles.face}>
+          <img src={logoImg} />
+          <p>{store?.username}</p>
+        </div>
       </section>
       <section className={styles.main}>
         <Outlet />
