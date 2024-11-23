@@ -1,16 +1,16 @@
 # react-pinia
 
-🍍 构建 react 极简状态管理
+🍍 Build minimal state management for React
 
 <a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.2.1732330226386" alt="npm package"></a>
 
-## 安装
+## Installation
 
 > npm i react-pinia
 
-## 全局使用
+## Global Usage
 
-定义数据源
+Define data source
 
 ```ts
 import { createStore } from 'react-pinia'
@@ -79,7 +79,7 @@ const store = createStore<State>({
 export default store
 ```
 
-全局挂载
+Global Mounting
 
 ```ts
 import { Provider } from 'react-pinia'
@@ -92,32 +92,32 @@ ReactDOM.render(
 )
 ```
 
-全局使用
+Global Usage
 
 ```ts
 import { useStore } from 'react-pinia'
-// 导入全局定义的类型
+// Import globally defined types
 import { State } from '@/store/global'
 const App = memo(() => {
-  const home = useStore<State, 'home'>('home')! // 这里需要传入泛型，并且断言
+  const home = useStore<State, 'home'>('home')! // Need to pass generics and assert
   return (
     <section>
       <p>count: {home.count}</p>
       <p>doubleCount: {home.doubleCount}</p>
       <p>{home.user}</p>
-      <button onClick={home.add}>累加</button>
+      <button onClick={home.add}>Add</button>
     </section>
   )
 })
 export default App
 ```
 
-## 局部使用
+## Local Usage
 
-局部使用不需要全局挂载，直接使用即可
+Local usage does not require global mounting, just use it directly
 
 ```ts
-// 定义数据源
+// Define data source
 import { defineStore } from 'react-pinia'
 
 type State = {
@@ -148,21 +148,21 @@ const useStore = defineStore<State>({
       this.count += 1
     },
   },
-  // 是否持久化数据
+  // Whether to persist data
   persist: {
     key: 'user',
-    storage: 'localStorage', // 'localStorage' | 'sessionStorage' 默认使用localStorage
+    storage: 'localStorage', // 'localStorage' | 'sessionStorage' default is localStorage
   },
   deet: true,
 })
 ```
 
 ```ts
-// 使用数据源
+// Use data source
 import { memo } from 'react'
 import useStore from './useStore'
 
-// 外部直接使用
+// Use directly outside
 const state = useStore().get()
 
 const Child = memo(() => {
@@ -174,23 +174,23 @@ const Child = memo(() => {
     <section>
       <p>{count}</p>
       <p>{doubleCount}</p>
-      <button onClick={add}>累加</button>
-      <button onClick={onClick}>外部修改</button>
+      <button onClick={add}>Add</button>
+      <button onClick={onClick}>Modify externally</button>
     </section>
   )
 })
 export default Child
 ```
 
-## 赞助 | Sponsored
+## Sponsored
 
-开源不易, 有了您的赞助, 我们会做的更好 👋
+Open source is not easy, with your sponsorship, we will do better 👋
 
 <img style="display: block;" src="https://tcly861204.github.io/static/wepay.jpg" width="240px" />
 
-## 技术反馈和交流群 | Technical feedback and communication
+## Technical feedback and communication
 
-微信：cobill2008
+WeChat: cobill2008
 
 ## License
 
