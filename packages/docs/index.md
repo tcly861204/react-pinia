@@ -16,10 +16,12 @@ hero:
       link: /docs
 
 features:
-  - title: Feature A
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature B
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  - title: Feature C
-    details: Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  - title: State Management
+    details: Provides a centralized state management system, allowing you to share and manage state across your application
+  - title: Lightweight
+    details: react-pinia has a small codebase, making it easy to learn and use
+  - title: Reactive
+    details: When state changes, components that depend on that state will automatically update
+  - title: High Performance
+    details: react-pinia leverages the latest React features, such as Hooks and Context API, to provide high-performance state management.
 ---

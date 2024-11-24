@@ -11,15 +11,23 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'Examples', link: '/examples' },
     ],
+    search: {
+      provider: 'local',
+    },
     sidebar: [
       {
-        text: 'Examples',
+        text: '快速开始',
         items: [
-          { text: 'Markdown Examples', link: '/examples' },
-          { text: 'Runtime API Examples', link: '/docs' },
+          { text: '安装', link: '/examples' },
+          { text: '使用', link: '/docs' },
         ],
       },
     ],
     socialLinks: [{ icon: 'github', link: 'https://github.com/tcly861204/react-pinia' }],
+    footer: {
+      copyright: 'Copyright © 2024-present tcly861204',
+      message: 'Released under the MIT License.',
+    },
   },
+  head: [['link', { rel: 'icon', type: 'image/png', href: '/assets/favicon.png' }]],
 })
