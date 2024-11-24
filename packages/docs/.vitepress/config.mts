@@ -5,6 +5,8 @@ export default defineConfig({
   base: '/react-pinia/',
   title: 'react-pinia',
   description: '🍍Building a Minimal State Management for React',
+  appearance: 'dark',
+  outDir: '../../dist',
   themeConfig: {
     logo: '/assets/favicon.png',
     nav: [
