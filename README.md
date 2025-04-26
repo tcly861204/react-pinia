@@ -59,7 +59,7 @@ const store = createStore<State>({
         // this.count += count
         // this.info.useName = 'cobill'
         this.info = {
-          useName: 'cobill',
+          useName: 'john',
           password: '123456789',
         }
         // this.user = 'world'
@@ -185,8 +185,6 @@ export default Child
 ## Sponsored
 
 Open source is not easy, with your sponsorship, we will do better 👋
-
-<img style="display: block;" src="https://tcly861204.github.io/static/wepay.jpg" width="240px" />
 
 ## Technical feedback and communication
 
