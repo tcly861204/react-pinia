@@ -1,7 +1,7 @@
 import { StateOption, State, Getters, Actions } from './types'
 import { observer } from './observer'
 import { useUpdate } from './hooks'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Dep } from './dep'
 import { getStorage, setStorage } from './storage'
 
@@ -28,19 +28,35 @@ export function defineStore<T>(options: StateOption<T>) {
     }
   }
   updateGetters(initState)
-  function useHooks() {
+  function useHooks(selector?: (state: State<T> & Getters<T> & Actions<T>) => any) {
     const update = useUpdate()
+    const selectorRef = useRef(selector)
+    selectorRef.current = selector
+    
+    const currentSelection = selector ? selector(_store) : _store
+    const selectionRef = useRef(currentSelection)
+    selectionRef.current = currentSelection
+
     useEffect(() => {
-      bus.on(uid, () => {
+      const handler = () => {
         persist && setStorage(persist, proxyState)
         updateGetters(_store)
-        update()
-      })
+        
+        if (selectorRef.current) {
+          const newSelection = selectorRef.current(_store)
+          if (newSelection !== selectionRef.current) {
+            update()
+          }
+        } else {
+          update()
+        }
+      }
+      bus.on(uid, handler)
       return () => {
-        bus.off(uid)
+        bus.off(uid, handler)
       }
     }, [])
-    return _store as State<T> & Getters<T> & Actions<T>
+    return currentSelection as State<T> & Getters<T> & Actions<T>
   }
   useHooks.get = function () {
     return proxyState

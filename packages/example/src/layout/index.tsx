@@ -14,6 +14,7 @@ const Layout = () => {
         <nav>
           <Link to='/'>useDefine</Link>
           <Link to='/global'>useGlobal</Link>
+          <Link to='/performance'>Performance</Link>
         </nav>
         <div className='flex-1'></div>
         <div className={styles.face}>

@@ -4,7 +4,7 @@
   "description": "🍍Building a Minimal State Management for React",
   "main": "./src/main.ts",
   "module": "./src/main.ts",
-  "types": "types/index.d.ts",
+  "types": "dist/main.d.ts",
   "scripts": {
     "types": "tsup src/main.ts --dts",
     "prebuild": "node build/version.js && npm run types",
