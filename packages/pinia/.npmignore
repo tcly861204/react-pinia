@@ -3,6 +3,7 @@ node_modules/
 .github
 package-lock.json
 dist
+test
 .babelrc
 tsconfig.json
 tsconfig.node.json
