@@ -1,6 +1,7 @@
 import { StateOption, State, Getters, Actions } from './types'
 import { observer } from './observer'
 import { useUpdate } from './hooks'
+import { debounce } from './utils'
 import { useEffect, useRef } from 'react'
 import { Dep } from './dep'
 import { getStorage, setStorage } from './storage'
@@ -22,7 +23,7 @@ export function defineStore<T>(options: StateOption<T>) {
   }
   function updateGetters(store: State<T>) {
     if (options.getters) {
-      Object.keys(options.getters).map((key) => {
+      Object.keys(options.getters).forEach((key) => {
         _store[key] = options.getters && options.getters[key](store)
       })
     }
@@ -38,18 +39,24 @@ export function defineStore<T>(options: StateOption<T>) {
     selectionRef.current = currentSelection
 
     useEffect(() => {
+      const debouncedSetStorage = debounce((val: any) => {
+        persist && setStorage(persist, val)
+      }, 300)
+
       const handler = () => {
-        persist && setStorage(persist, proxyState)
+        persist && debouncedSetStorage(proxyState)
         updateGetters(_store)
-        
-        if (selectorRef.current) {
-          const newSelection = selectorRef.current(_store)
-          if (newSelection !== selectionRef.current) {
+
+        Promise.resolve().then(() => {
+          if (selectorRef.current) {
+            const newSelection = selectorRef.current(_store)
+            if (newSelection !== selectionRef.current) {
+              update()
+            }
+          } else {
             update()
           }
-        } else {
-          update()
-        }
+        })
       }
       bus.on(uid, handler)
       return () => {

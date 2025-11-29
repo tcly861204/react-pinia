@@ -19,8 +19,19 @@ export const typeOf = (value: unknown) => {
 
 export const depsAreSame = (oldDeps: DependencyList, deps: DependencyList): boolean => {
   if (oldDeps === deps) return true
+  if (oldDeps.length !== deps.length) return false
   for (let i = 0; i < oldDeps.length; i++) {
     if (!Object.is(oldDeps[i], deps[i])) return false
   }
   return true
+}
+
+export const debounce = (fn: Function, delay: number) => {
+  let timer: any = null
+  return function (this: any, ...args: any[]) {
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => {
+      fn.apply(this, args)
+    }, delay)
+  }
 }

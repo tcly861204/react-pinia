@@ -21,7 +21,7 @@
     "jsx": "react-jsx"
   },
   "include": [
-    "src",
+    "src", "test/store.test.tsx", "test/utils.test.ts",
   ],
   "references": [
     {
