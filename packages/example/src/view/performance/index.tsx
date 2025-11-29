@@ -11,9 +11,9 @@ const CountComponent = () => {
   
   return (
     <div style={{ border: '1px solid blue', padding: '10px', margin: '10px' }}>
-      <h3>Count Component</h3>
-      <p>Count: {count}</p>
-      <p>Render Count: {renderCount.current}</p>
+      <h3>计数组件</h3>
+      <p>计数: {count}</p>
+      <p>渲染次数: {renderCount.current}</p>
     </div>
   )
 }
@@ -27,9 +27,9 @@ const UserComponent = () => {
   
   return (
     <div style={{ border: '1px solid green', padding: '10px', margin: '10px' }}>
-      <h3>User Component</h3>
-      <p>User: {user}</p>
-      <p>Render Count: {renderCount.current}</p>
+      <h3>用户组件</h3>
+      <p>用户: {user}</p>
+      <p>渲染次数: {renderCount.current}</p>
     </div>
   )
 }
@@ -39,9 +39,9 @@ const Controls = () => {
   
   return (
     <div style={{ border: '1px solid red', padding: '10px', margin: '10px' }}>
-      <h3>Controls</h3>
-      <button onClick={() => store && store.count++}>Increment Count</button>
-      <button onClick={() => store && (store.user = 'User ' + Math.random().toFixed(2))}>Change User</button>
+      <h3>控制面板</h3>
+      <button onClick={() => store && store.count++}>增加计数</button>
+      <button onClick={() => store && (store.user = 'User ' + Math.random().toFixed(2))}>修改用户</button>
     </div>
   )
 }
@@ -49,8 +49,8 @@ const Controls = () => {
 const PerformanceDemo = () => {
   return (
     <div>
-      <h2>Performance Demo</h2>
-      <p>Verify that updating Count does not re-render User Component, and vice versa.</p>
+      <h2>性能演示</h2>
+      <p>验证更新计数不会导致用户组件重新渲染，反之亦然。</p>
       <div style={{ display: 'flex' }}>
         <CountComponent />
         <UserComponent />

@@ -32,15 +32,22 @@ export const createStore = <T extends { [K in keyof T]: T[K] }>(options: {
   }
 }
 
-export const useStore = <T extends { [K in keyof T]: T[K] }, K extends keyof T, S = any>(
+export function useStore<T extends { [K in keyof T]: T[K] }, K extends keyof T>(
+  globalKey: K
+): State<T[K]> & Getters<T[K]> & Actions<T[K]>
+export function useStore<T extends { [K in keyof T]: T[K] }, K extends keyof T, S>(
+  globalKey: K,
+  selector: (store: State<T[K]> & Getters<T[K]> & Actions<T[K]>) => S
+): S
+export function useStore<T extends { [K in keyof T]: T[K] }, K extends keyof T, S = any>(
   globalKey: K,
   selector?: (store: State<T[K]> & Getters<T[K]> & Actions<T[K]>) => S
-) => {
+) {
   const store = useContext(Context) as {
     [K in keyof T]: (
       selector?: (store: State<T[K]> & Getters<T[K]> & Actions<T[K]>) => S
     ) => S
   }
   if (globalKey in store) return store[globalKey](selector)
-  return null
+  return null as any
 }
