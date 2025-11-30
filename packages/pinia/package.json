@@ -1,6 +1,6 @@
 {
   "name": "react-pinia",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "description": "🍍Building a Minimal State Management for React",
   "main": "./src/main.ts",
   "module": "./src/main.ts",

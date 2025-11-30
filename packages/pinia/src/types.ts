@@ -32,6 +32,12 @@ export type Getters<T> = T extends { getters: infer G } ? G : {}
 export type Actions<T> = T extends { actions: infer G } ? G : {}
 
 /**
+ * Action 函数类型定义
+ * @template S - 状态类型
+ */
+export type ActionFunction<S> = (this: S, ...args: any[]) => any | Promise<any>
+
+/**
  * 状态选项接口
  * 定义创建 store 时的配置选项
  * @template T - 状态类型
@@ -41,7 +47,7 @@ export interface StateOption<T> {
   state: () => State<T>
   // 修改状态的方法集合（可选）
   actions?: {
-    [key: string]: (this: State<T>, ...args: any[]) => unknown
+    [key: string]: ActionFunction<State<T>>
   }
   // 监听状态更新并生成派生状态的计算属性（可选）
   getters?: {
