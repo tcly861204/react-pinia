@@ -613,7 +613,7 @@ React-Pinia 是一个设计简洁、实现优雅的状态管理库。主要优�
 - [x] ✅ 添加类型辅助工具 - **已完成**
 
 ### 功能扩展
-- [ ] 集成 DevTools
+- [x] ✅ 集成 DevTools - **已完成**
 - [ ] 实现插件系统
 - [ ] 添加中间件支持
 - [ ] 实现异步 Actions
@@ -653,3 +653,46 @@ React-Pinia 是一个设计简洁、实现优雅的状态管理库。主要优�
 **相关文件**:
 - `packages/pinia/src/defineStore.ts` - 核心实现
 - `packages/pinia/test/defineStore.test.tsx` - 测试用例
+
+---
+
+### DevTools 集成 (2025-11-30)
+
+**实现内容**:
+- 集成 Redux DevTools Extension 支持
+- 实现状态变化实时追踪
+- 添加 Action 调用追踪（同步和异步）
+- 实现时间旅行调试功能
+- 支持状态导入/导出
+- 添加完整的配置选项（name, enabled, trace）
+
+**功能特性**:
+- ✅ 实时状态监控 - 追踪每次状态变化
+- ✅ Action 追踪 - 记录 action 调用、参数和结果
+- ✅ 时间旅行 - 支持 JUMP_TO_STATE、RESET、COMMIT、ROLLBACK
+- ✅ 状态快照 - 导入/导出状态用于调试和测试
+- ✅ 错误处理 - 优雅处理 DevTools 未安装等情况
+- ✅ TypeScript 支持 - 完整的类型定义
+
+**测试覆盖**:
+- ✅ DevTools 配置选项测试
+- ✅ 状态追踪测试
+- ✅ Action 追踪测试（同步/异步）
+- ✅ 时间旅行功能测试
+- ✅ 错误处理测试
+- ✅ 断开连接测试
+
+**文档**:
+- ✅ 完整的中文使用指南
+- ✅ 配置选项说明
+- ✅ 最佳实践建议
+- ✅ 故障排除指南
+
+**相关文件**:
+- `packages/pinia/src/devtools.ts` - DevTools 集成实现
+- `packages/pinia/src/defineStore.ts` - Action 包装和状态恢复
+- `packages/pinia/src/types.ts` - 类型定义
+- `packages/pinia/src/main.ts` - 导出 DevTools API
+- `packages/pinia/test/devtools.test.ts` - 测试用例
+- `packages/docs/devtools-guide.md` - 使用文档
+- `README.md` - 快速开始指南

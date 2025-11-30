@@ -153,8 +153,50 @@ const useStore = defineStore<State>({
     key: 'user',
     storage: 'localStorage', // 'localStorage' | 'sessionStorage' default is localStorage
   },
-  deet: true,
+  // Enable DevTools for debugging
+  devtools: {
+    enabled: true,
+    name: 'My Store',  // Display name in DevTools
+    trace: true        // Enable stack trace
+  },
+  deep: true,
 })
+```
+
+## DevTools Integration
+
+React-Pinia integrates with Redux DevTools Extension for powerful debugging capabilities:
+
+- 📊 **Real-time State Tracking** - Monitor all state changes
+- 🎬 **Action Tracking** - Record all action calls with arguments and results
+- ⏱️ **Time Travel Debugging** - Jump to any historical state
+- 💾 **State Import/Export** - Save and restore state snapshots
+
+### Quick Start
+
+1. Install [Redux DevTools Extension](https://github.com/reduxjs/redux-devtools)
+2. Enable DevTools in your store:
+
+```ts
+const useStore = defineStore({
+  state: () => ({ count: 0 }),
+  actions: {
+    increment() {
+      this.count++
+    }
+  },
+  devtools: true  // Enable DevTools
+})
+```
+
+For detailed documentation, see [DevTools Guide](./packages/docs/devtools-guide.md).
+
+## Documentation
+
+- [DevTools Guide](./packages/docs/devtools-guide.md) - Complete DevTools integration guide
+- [API Reference](./packages/docs/api-reference.md) - Full API documentation
+- [Examples](./packages/example) - Example projects
+
 ```
 
 ```ts

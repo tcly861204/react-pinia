@@ -5,7 +5,7 @@ import { debounce } from './utils'
 import { useEffect, useRef } from 'react'
 import { Dep } from './dep'
 import { getStorage, setStorage } from './storage'
-import { setupDevTools } from './devtools'
+import { setupDevTools, DevToolsInstance } from './devtools'
 
 /**
  * Getter 缓存接口
@@ -48,19 +48,74 @@ export function defineStore<T>(options: StateOption<T>) {
   // 创建 store 对象，继承自代理状态
   const _store = Object.create(proxyState)
 
+  // 状态恢复函数(用于时间旅行调试)
+  const restoreState = (newState: any) => {
+    Object.keys(newState).forEach((key) => {
+      ;(proxyState as any)[key] = newState[key]
+    })
+    // 恢复状态后更新 getters
+    updateGetters(_store)
+  }
+
   // 初始化 DevTools
-  const devtools = setupDevTools(proxyState, options)
+  const devtools: DevToolsInstance | null = setupDevTools(proxyState, options, restoreState)
   if (devtools) {
     bus.on(uid, (key: string) => {
-      devtools.send(`Mutation: ${key}`, proxyState)
+      devtools.send({ type: `Mutation: ${key}`, payload: { key, value: (proxyState as any)[key] } }, proxyState)
     })
   }
   
   // 绑定 actions 到 store 对象
   if (options.actions) {
     Object.keys(options.actions).forEach((key: string) => {
-      // 将 action 方法的 this 绑定到代理状态，确保在 action 中可以直接修改状态
-      _store[key] = options.actions![key].bind(proxyState)
+      const originalAction = options.actions![key]
+      
+      // 包装 action 以支持 DevTools 追踪
+      _store[key] = function(this: any, ...args: any[]) {
+        // 通知 DevTools action 开始执行
+        devtools?.send(
+          { type: `Action: ${key}`, payload: { args } },
+          proxyState
+        )
+        
+        try {
+          const result = originalAction.apply(this, args)
+          
+          // 处理异步 action
+          if (result instanceof Promise) {
+            return result.then(
+              (value) => {
+                devtools?.send(
+                  { type: `Action: ${key} ✓`, payload: { args, result: value } },
+                  proxyState
+                )
+                return value
+              },
+              (error) => {
+                devtools?.send(
+                  { type: `Action: ${key} ✗`, payload: { args, error: error.message } },
+                  proxyState
+                )
+                throw error
+              }
+            )
+          }
+          
+          // 同步 action 完成
+          devtools?.send(
+            { type: `Action: ${key} ✓`, payload: { args, result } },
+            proxyState
+          )
+          return result
+        } catch (error: any) {
+          // 同步 action 错误
+          devtools?.send(
+            { type: `Action: ${key} ✗`, payload: { args, error: error.message } },
+            proxyState
+          )
+          throw error
+        }
+      }.bind(proxyState)
     })
   }
   
