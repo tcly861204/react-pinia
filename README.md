@@ -2,7 +2,7 @@
 
 🍍 Build minimal state management for React
 
-<a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.3.1732354909821" alt="npm package"></a>
+<a href="https://npmjs.com/package/react-pinia" target="_blank"><img src="https://badgen.net/npm/v/react-pinia?v=2.7.4.1764468766715" alt="npm package"></a>
 
 ## Installation
 
@@ -59,7 +59,7 @@ const store = createStore<State>({
         // this.count += count
         // this.info.useName = 'cobill'
         this.info = {
-          useName: 'john',
+          useName: 'cobill',
           password: '123456789',
         }
         // this.user = 'world'
@@ -185,6 +185,8 @@ export default Child
 ## Sponsored
 
 Open source is not easy, with your sponsorship, we will do better 👋
+
+<img style="display: block;" src="https://tcly861204.github.io/static/wepay.jpg" width="240px" />
 
 ## Technical feedback and communication
 

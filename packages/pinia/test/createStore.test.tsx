@@ -193,7 +193,10 @@ describe('createStore', () => {
 
       // 尝试获取不存在的模块
       const { result } = renderHook(
-        () => useStore('nonexistent' as any),
+        () => {
+          // @ts-ignore
+          return useStore('nonexistent' as any)
+        },
         { wrapper }
       )
 
