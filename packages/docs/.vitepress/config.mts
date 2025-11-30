@@ -10,18 +10,28 @@ export default defineConfig({
   themeConfig: {
     logo: '/assets/favicon.png',
     nav: [
-      { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/examples' },
+      { text: '首页', link: '/' },
+      { text: '快速开始', link: '/quick-start' },
+      { text: '文档', link: '/docs' },
+      { text: '示例', link: '/examples' },
+      { text: 'API', link: '/api' },
     ],
     search: {
       provider: 'local',
     },
     sidebar: [
       {
-        text: '快速开始',
+        text: '指南',
         items: [
-          { text: '安装', link: '/examples' },
-          { text: '使用', link: '/docs' },
+          { text: '快速开始', link: '/quick-start' },
+          { text: '使用文档', link: '/docs' },
+          { text: '示例代码', link: '/examples' },
+        ],
+      },
+      {
+        text: 'API 参考',
+        items: [
+          { text: 'API 文档', link: '/api' },
         ],
       },
     ],

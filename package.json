@@ -1,6 +1,6 @@
 {
   "name": "monorepo-react-pinia",
-  "version": "2.7.3",
+  "version": "2.7.4",
   "private": true,
   "description": "🍍Building a Minimal State Management for React",
   "type": "module",
