@@ -118,6 +118,6 @@ declare function useStore<T extends {
     [K in keyof T]: T[K];
 }, K extends keyof T, S>(globalKey: K, selector: (store: State<T[K]> & Getters<T[K]> & Actions<T[K]>) => S): S;
 
-declare const version = "2.7.3";
+declare const version = "2.7.4";
 
 export { Provider, createStore, defineStore, useStore, version };

@@ -58,3 +58,28 @@ export interface StateOption<T> {
   // 是否深度监听数据变化，默认为 true（可选）
   deep?: boolean
 }
+
+/**
+ * 提取 Store 中的 State 类型
+ * @template S - Store 配置对象类型
+ */
+export type StoreState<S> = S extends { state: () => infer R } ? R : never
+
+/**
+ * 提取 Store 中的 Getters 类型
+ * @template S - Store 配置对象类型
+ */
+export type StoreGetters<S> = S extends { getters: infer G } ? G : {}
+
+/**
+ * 提取 Store 中的 Actions 类型
+ * @template S - Store 配置对象类型
+ */
+export type StoreActions<S> = S extends { actions: infer A } ? A : {}
+
+/**
+ * 完整的 Store 类型
+ * 包含 State, Getters, Actions
+ * @template S - Store 配置对象类型
+ */
+export type Store<S> = StoreState<S> & StoreGetters<S> & StoreActions<S>
