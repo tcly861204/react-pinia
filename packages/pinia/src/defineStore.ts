@@ -5,6 +5,7 @@ import { debounce } from './utils'
 import { useEffect, useRef } from 'react'
 import { Dep } from './dep'
 import { getStorage, setStorage } from './storage'
+import { setupDevTools } from './devtools'
 
 /**
  * Getter 缓存接口
@@ -46,6 +47,14 @@ export function defineStore<T>(options: StateOption<T>) {
   const proxyState = observer(null, initState, callback, true, proxyMap, rawMap)
   // 创建 store 对象，继承自代理状态
   const _store = Object.create(proxyState)
+
+  // 初始化 DevTools
+  const devtools = setupDevTools(proxyState, options)
+  if (devtools) {
+    bus.on(uid, (key: string) => {
+      devtools.send(`Mutation: ${key}`, proxyState)
+    })
+  }
   
   // 绑定 actions 到 store 对象
   if (options.actions) {

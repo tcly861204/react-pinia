@@ -57,6 +57,17 @@ export interface StateOption<T> {
   persist?: Persist
   // 是否深度监听数据变化，默认为 true（可选）
   deep?: boolean
+  // DevTools 配置（可选）
+  devtools?: boolean | DevToolsOptions
+}
+
+/**
+ * DevTools 配置选项
+ */
+export interface DevToolsOptions {
+  name?: string
+  enabled?: boolean
+  trace?: boolean
 }
 
 /**
