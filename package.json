@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "pnpm -F react-example run dev",
     "build": "pnpm -F react-pinia run build",
+    "test": "pnpm -F react-pinia run test",
     "publish": "bash publish.sh",
     "docs:dev": "pnpm -F react-docs run docs:dev",
     "docs:build": "pnpm -F react-docs run docs:build"
