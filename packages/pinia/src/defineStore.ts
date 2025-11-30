@@ -41,7 +41,9 @@ export function defineStore<T>(options: StateOption<T>) {
     bus.emit(uid, key)
   }
   // 创建响应式代理对象，监听状态变化
-  const proxyState = observer(null, initState, callback, true)
+  const proxyMap = new WeakMap()
+  const rawMap = new WeakMap()
+  const proxyState = observer(null, initState, callback, true, proxyMap, rawMap)
   // 创建 store 对象，继承自代理状态
   const _store = Object.create(proxyState)
   

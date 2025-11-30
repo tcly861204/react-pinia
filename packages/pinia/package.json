@@ -11,7 +11,7 @@
     "build": "tsc && vite build",
     "postbuild": "node build/index.js",
     "preview": "vite preview",
-    "test": "vitest"
+    "test": "vitest run --update"
   },
   "repository": {
     "type": "git",

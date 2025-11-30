@@ -1,9 +1,6 @@
 import { typeOf } from './utils'
 
-// 用于缓存原始对象到代理对象的映射，避免重复创建代理
-const proxyMap = new WeakMap()
-// 用于缓存代理对象到原始对象的映射，用于判断对象是否已被代理
-const rawMap = new WeakMap()
+
 
 /**
  * 创建响应式观察者
@@ -19,7 +16,9 @@ export function observer<T extends Record<string, any>>(
   storeKey: string | null,
   initialVal: T,
   cb: (T: string, U: string | null) => void,
-  deep = true
+  deep = true,
+  proxyMap = new WeakMap(),
+  rawMap = new WeakMap()
 ): T {
   // 检查是否已经为该对象创建过代理，如果有则直接返回
   const existingProxy = proxyMap.get(initialVal)
@@ -42,7 +41,19 @@ export function observer<T extends Record<string, any>>(
       const res = Reflect.get(target, key, receiver)
       // 如果属性值是对象或数组，递归创建代理；否则直接返回
       return typeOf(res) === 'object' || typeOf(res) === 'array'
-        ? observer(storeKey, res, cb, deep)
+        ? observer(
+            storeKey,
+            res,
+            (k, s) => {
+              // 触发原始回调
+              cb(k, s)
+              // 冒泡：触发当前 key 的变化
+              cb(key as string, s)
+            },
+            deep,
+            proxyMap,
+            rawMap
+          )
         : Reflect.get(target, key)
     },
     // 拦截属性设置操作
