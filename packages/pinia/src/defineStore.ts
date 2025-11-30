@@ -7,6 +7,16 @@ import { Dep } from './dep'
 import { getStorage, setStorage } from './storage'
 
 /**
+ * Getter 缓存接口
+ * 用于存储 getter 的计算结果和依赖信息
+ */
+interface GetterCache {
+  value: any           // 缓存的计算结果
+  deps: Set<string>    // 依赖的状态键集合
+  dirty: boolean       // 是否需要重新计算的标记
+}
+
+/**
  * 定义一个状态管理 store
  * 创建一个响应式的状态管理器，支持状态、操作、计算属性和持久化
  * @template T - 状态类型
@@ -22,7 +32,11 @@ export function defineStore<T>(options: StateOption<T>) {
   const persist = options.persist
   // 初始化状态：合并默认状态和持久化存储的状态
   const initState = Object.assign({}, options.state(), persist && getStorage<State<T>>(persist))
-  // 状态变化回调函数
+  
+  // Getter 缓存存储：存储每个 getter 的缓存信息
+  const getterCaches = new Map<string, GetterCache>()
+  
+  // 状态变化回调函数，传递变化的键
   const callback = (key: string) => {
     bus.emit(uid, key)
   }
@@ -40,16 +54,70 @@ export function defineStore<T>(options: StateOption<T>) {
   }
   
   /**
-   * 更新计算属性（getters）
-   * @param store - 当前状态对象
+   * 创建依赖追踪代理
+   * 用于记录 getter 函数访问了哪些状态属性
+   * @param state - 状态对象
+   * @param deps - 依赖集合，用于存储访问的键
+   * @returns 返回代理对象
    */
-  function updateGetters(store: State<T>) {
-    if (options.getters) {
-      Object.keys(options.getters).forEach((key) => {
-        // 重新计算每个 getter 的值并更新到 store
-        _store[key] = options.getters && options.getters[key](store)
-      })
-    }
+  function createDepsTracker(state: State<T>, deps: Set<string>) {
+    return new Proxy(state, {
+      get(target, key, receiver) {
+        // 记录访问的键到依赖集合
+        if (typeof key === 'string') {
+          deps.add(key)
+        }
+        return Reflect.get(target, key, receiver)
+      }
+    })
+  }
+  
+  /**
+   * 更新计算属性（getters）
+   * 支持智能缓存，只在依赖的状态变化时重新计算
+   * @param store - 当前状态对象
+   * @param changedKey - 发生变化的状态键（可选）
+   */
+  function updateGetters(store: State<T>, changedKey?: string) {
+    if (!options.getters) return
+    
+    Object.keys(options.getters).forEach((getterKey) => {
+      // 获取或创建缓存
+      let cache = getterCaches.get(getterKey)
+      
+      // 如果没有缓存，初始化
+      if (!cache) {
+        cache = {
+          value: undefined,
+          deps: new Set<string>(),
+          dirty: true
+        }
+        getterCaches.set(getterKey, cache)
+      }
+      
+      // 判断是否需要重新计算
+      // 1. 如果是脏的（第一次计算或被标记为需要更新）
+      // 2. 如果没有 changedKey（全量更新）
+      // 3. 如果 changedKey 在依赖中（依赖的状态变化了）
+      const shouldUpdate = cache.dirty || 
+                          !changedKey || 
+                          cache.deps.has(changedKey)
+      
+      if (shouldUpdate) {
+        // 清空依赖集合，重新收集
+        cache.deps.clear()
+        
+        // 创建依赖追踪代理
+        const trackedState = createDepsTracker(store, cache.deps)
+        
+        // 重新计算 getter
+        cache.value = options.getters![getterKey](trackedState)
+        cache.dirty = false
+        
+        // 更新到 store
+        _store[getterKey] = cache.value
+      }
+    })
   }
   
   // 初始化时计算一次 getters
@@ -78,12 +146,12 @@ export function defineStore<T>(options: StateOption<T>) {
         persist && setStorage(persist, val)
       }, 300)
 
-      // 状态变化处理函数
-      const handler = () => {
+      // 状态变化处理函数，接收变化的键
+      const handler = (changedKey: string) => {
         // 如果开启了持久化，将状态保存到存储
         persist && debouncedSetStorage(proxyState)
-        // 更新计算属性
-        updateGetters(_store)
+        // 更新计算属性，传递变化的键以实现智能缓存
+        updateGetters(_store, changedKey)
 
         // 使用 Promise.resolve().then 实现微任务批处理，优化性能
         Promise.resolve().then(() => {

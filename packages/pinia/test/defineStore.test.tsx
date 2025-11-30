@@ -195,6 +195,243 @@ describe('defineStore', () => {
     })
   })
 
+  describe('Getters 缓存机制', () => {
+    it('不相关的状态变化不应触发 getter 重新计算', async () => {
+      const getterSpy = vi.fn()
+      
+      const useStore = defineStore<{
+        count: number
+        name: string
+        actions: { increment: () => void; setName: (n: string) => void }
+        getters: { doubleCount: number }
+      }>({
+        state: () => ({ count: 5, name: 'test' }),
+        actions: {
+          increment() {
+            this.count++
+          },
+          setName(n: string) {
+            this.name = n
+          }
+        },
+        getters: {
+          doubleCount(state) {
+            getterSpy()
+            return state.count * 2
+          }
+        }
+      })
+
+      const { result, waitForNextUpdate } = renderHook(() => useStore())
+      
+      // 初始计算
+      expect(getterSpy).toHaveBeenCalledTimes(1)
+      expect(result.current.doubleCount).toBe(10)
+      
+      // 修改不相关的状态（name）
+      act(() => {
+        result.current.setName('updated')
+      })
+      
+      await waitForNextUpdate()
+      
+      // getter 不应该重新计算
+      expect(getterSpy).toHaveBeenCalledTimes(1)
+      expect(result.current.doubleCount).toBe(10)
+      
+      // 修改相关的状态（count）
+      act(() => {
+        result.current.increment()
+      })
+      
+      await waitForNextUpdate()
+      
+      // getter 应该重新计算
+      expect(getterSpy).toHaveBeenCalledTimes(2)
+      expect(result.current.doubleCount).toBe(12)
+    })
+
+    it('多个 getters 应该独立缓存', async () => {
+      const doubleCountSpy = vi.fn()
+      const fullNameSpy = vi.fn()
+      
+      const useStore = defineStore<{
+        count: number
+        firstName: string
+        lastName: string
+        actions: { 
+          increment: () => void
+          setFirstName: (n: string) => void
+        }
+        getters: { 
+          doubleCount: number
+          fullName: string
+        }
+      }>({
+        state: () => ({ count: 5, firstName: 'John', lastName: 'Doe' }),
+        actions: {
+          increment() {
+            this.count++
+          },
+          setFirstName(n: string) {
+            this.firstName = n
+          }
+        },
+        getters: {
+          doubleCount(state) {
+            doubleCountSpy()
+            return state.count * 2
+          },
+          fullName(state) {
+            fullNameSpy()
+            return `${state.firstName} ${state.lastName}`
+          }
+        }
+      })
+
+      const { result, waitForNextUpdate } = renderHook(() => useStore())
+      
+      // 初始计算
+      expect(doubleCountSpy).toHaveBeenCalledTimes(1)
+      expect(fullNameSpy).toHaveBeenCalledTimes(1)
+      
+      // 修改 count，只应重新计算 doubleCount
+      act(() => {
+        result.current.increment()
+      })
+      
+      await waitForNextUpdate()
+      
+      expect(doubleCountSpy).toHaveBeenCalledTimes(2)
+      expect(fullNameSpy).toHaveBeenCalledTimes(1)
+      
+      // 修改 firstName，只应重新计算 fullName
+      act(() => {
+        result.current.setFirstName('Jane')
+      })
+      
+      await waitForNextUpdate()
+      
+      expect(doubleCountSpy).toHaveBeenCalledTimes(2)
+      expect(fullNameSpy).toHaveBeenCalledTimes(2)
+    })
+
+    it('性能测试：缓存应该减少 getter 计算次数', async () => {
+      let computeCount = 0
+      
+      const useStore = defineStore<{
+        a: number
+        b: number
+        c: number
+        actions: { 
+          setA: (v: number) => void
+          setB: (v: number) => void
+          setC: (v: number) => void
+        }
+        getters: { expensiveComputation: number }
+      }>({
+        state: () => ({ a: 1, b: 2, c: 3 }),
+        actions: {
+          setA(v: number) { this.a = v },
+          setB(v: number) { this.b = v },
+          setC(v: number) { this.c = v }
+        },
+        getters: {
+          expensiveComputation(state) {
+            computeCount++
+            // 只依赖 a
+            return state.a * 1000
+          }
+        }
+      })
+
+      const { result, waitForNextUpdate } = renderHook(() => useStore())
+      
+      const initialCount = computeCount
+      
+      // 修改 b 和 c 各 5 次
+      for (let i = 0; i < 5; i++) {
+        act(() => {
+          result.current.setB(i)
+        })
+        await waitForNextUpdate()
+        
+        act(() => {
+          result.current.setC(i)
+        })
+        await waitForNextUpdate()
+      }
+      
+      // getter 不应该重新计算（因为不依赖 b 和 c）
+      expect(computeCount).toBe(initialCount)
+      
+      // 修改 a
+      act(() => {
+        result.current.setA(10)
+      })
+      await waitForNextUpdate()
+      
+      // 现在应该重新计算了
+      expect(computeCount).toBe(initialCount + 1)
+      expect(result.current.expensiveComputation).toBe(10000)
+    })
+
+    it('getter 依赖多个状态时应该正确追踪', async () => {
+      const getterSpy = vi.fn()
+      
+      const useStore = defineStore<{
+        firstName: string
+        lastName: string
+        age: number
+        actions: { 
+          setFirstName: (n: string) => void
+          setLastName: (n: string) => void
+          setAge: (a: number) => void
+        }
+        getters: { userInfo: string }
+      }>({
+        state: () => ({ firstName: 'John', lastName: 'Doe', age: 30 }),
+        actions: {
+          setFirstName(n: string) { this.firstName = n },
+          setLastName(n: string) { this.lastName = n },
+          setAge(a: number) { this.age = a }
+        },
+        getters: {
+          userInfo(state) {
+            getterSpy()
+            // 依赖 firstName 和 lastName，不依赖 age
+            return `${state.firstName} ${state.lastName}`
+          }
+        }
+      })
+
+      const { result, waitForNextUpdate } = renderHook(() => useStore())
+      
+      expect(getterSpy).toHaveBeenCalledTimes(1)
+      
+      // 修改 age（不相关）
+      act(() => {
+        result.current.setAge(31)
+      })
+      await waitForNextUpdate()
+      expect(getterSpy).toHaveBeenCalledTimes(1)
+      
+      // 修改 firstName（相关）
+      act(() => {
+        result.current.setFirstName('Jane')
+      })
+      await waitForNextUpdate()
+      expect(getterSpy).toHaveBeenCalledTimes(2)
+      
+      // 修改 lastName（相关）
+      act(() => {
+        result.current.setLastName('Smith')
+      })
+      await waitForNextUpdate()
+      expect(getterSpy).toHaveBeenCalledTimes(3)
+    })
+  })
+
   describe('响应式更新', () => {
     it('直接修改状态应该触发更新', async () => {
       const useStore = defineStore<{ count: number }>({
