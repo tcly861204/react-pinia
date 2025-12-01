@@ -9,5 +9,6 @@ tsconfig.json
 tsconfig.node.json
 build
 vite.config.ts
+vitest.config.ts
 index.html
 pinia
