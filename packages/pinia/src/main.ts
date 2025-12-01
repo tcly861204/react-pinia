@@ -22,3 +22,6 @@ export type {
 // 导出测试工具
 export { createTestStore } from './testing'
 export type { TestStore } from './testing'
+// 导出异步 Actions
+export { defineAsyncAction, defineAsyncAction0 } from './async-action'
+export type { AsyncAction, AsyncActionState } from './async-action'
