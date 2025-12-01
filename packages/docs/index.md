@@ -9,11 +9,14 @@ hero:
   image: '/assets/favicon.png'
   actions:
     - theme: brand
-      text: Examples
-      link: /examples
+      text: Quick-Start
+      link: /quick-start
     - theme: alt
       text: Docs
       link: /docs
+    - theme: alt
+      text: GitHub
+      link: https://github.com/tcly861204/react-pinia
 
 features:
   - title: State Management
