@@ -31,6 +31,7 @@ export default defineConfig({
           { text: '中间件系统', link: '/middleware-guide' },
           { text: '模块化', link: '/modules-guide' },
           { text: '订阅机制', link: '/subscription-guide' },
+          { text: '持久化增强', link: '/persistence-guide' },
           { text: '测试工具', link: '/testing-guide' },
         ],
       },

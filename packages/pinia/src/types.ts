@@ -6,14 +6,47 @@ import { Middleware } from './middleware'
 const storageType = ['localStorage', 'sessionStorage']
 
 /**
- * 持久化配置类型
- * @property {string} key - 存储的键名
- * @property {string} [storage] - 存储类型，可选 'localStorage' 或 'sessionStorage'，默认为 'localStorage'
+ * 序列化器接口
  */
-export type Persist = {
-  key: string
-  storage?: (typeof storageType)[number]
+export interface Serializer {
+  serialize: (value: any) => string
+  deserialize: (value: string) => any
 }
+
+/**
+ * 加密器接口
+ */
+export interface Encryption {
+  encrypt: (value: string) => string
+  decrypt: (value: string) => string
+}
+
+/**
+ * 持久化配置选项
+ */
+export interface PersistOptions {
+  /** 存储的键名 */
+  key: string
+  /** 存储类型，默认为 'localStorage' */
+  storage?: 'localStorage' | 'sessionStorage'
+  /** 只持久化特定路径的状态 */
+  paths?: string[]
+  /** 自定义序列化器 */
+  serializer?: Serializer
+  /** 恢复状态前的钩子，可用于转换数据 */
+  beforeRestore?: (savedState: any) => any
+  /** 恢复状态后的钩子 */
+  afterRestore?: (restoredState: any) => void
+  /** 加密配置 */
+  encryption?: Encryption
+  /** 是否开启调试日志 */
+  debug?: boolean
+}
+
+/**
+ * 兼容旧版本的类型别名
+ */
+export type Persist = PersistOptions
 
 /**
  * 状态类型，从 T 中排除 actions 和 getters 属性

@@ -36,6 +36,11 @@ export function defineStore<T>(options: StateOption<T>) {
   // 初始化状态：合并默认状态和持久化存储的状态
   const initState = Object.assign({}, options.state(), persist && getStorage<State<T>>(persist))
   
+  // 调用恢复后钩子
+  if (persist && persist.afterRestore) {
+    persist.afterRestore(initState)
+  }
+  
   // Getter 缓存存储：存储每个 getter 的缓存信息
   const getterCaches = new Map<string, GetterCache>()
   
