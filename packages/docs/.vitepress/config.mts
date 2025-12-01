@@ -29,6 +29,7 @@ export default defineConfig({
           { text: '调试工具', link: '/devtools-guide' },
           { text: '插件系统', link: '/plugin-guide' },
           { text: '中间件系统', link: '/middleware-guide' },
+          { text: '模块化', link: '/modules-guide' },
         ],
       },
       {

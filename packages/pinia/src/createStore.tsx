@@ -32,11 +32,79 @@ export const Provider = ({ store, children }: ProviderProps): JSX.Element => {
 }
 
 /**
+ * 递归创建嵌套模块
+ * @param options - 模块配置
+ * @param globalOptions - 全局配置
+ * @param parentPath - 父模块路径（用于命名空间）
+ * @returns 创建的模块对象
+ */
+function createNestedStore<T>(
+  options: StateOption<T>,
+  globalOptions?: {
+    plugins?: import('./plugin').PiniaPlugin[]
+    middleware?: import('./middleware').Middleware<any>[]
+  },
+  parentPath: string = ''
+): any {
+  const storeOptions = { ...options }
+  
+  // 合并全局插件
+  if (globalOptions?.plugins) {
+    storeOptions.plugins = [
+      ...(globalOptions.plugins || []),
+      ...(storeOptions.plugins || [])
+    ]
+  }
+  
+  // 合并全局中间件
+  if (globalOptions?.middleware) {
+    storeOptions.middleware = [
+      ...(globalOptions.middleware || []),
+      ...(storeOptions.middleware || [])
+    ]
+  }
+  
+  // 创建当前层级的 store
+  const currentStore = defineStore(storeOptions)
+  
+  // 如果有嵌套模块，递归创建
+  if (options.modules) {
+    const nestedModules: any = {}
+    
+    Object.keys(options.modules).forEach((key) => {
+      const modulePath = parentPath ? `${parentPath}.${key}` : key
+      const moduleOptions = options.modules![key]
+      
+      // 递归创建嵌套模块
+      nestedModules[key] = createNestedStore(
+        moduleOptions,
+        globalOptions,
+        modulePath
+      )
+    })
+    
+    // 将嵌套模块附加到当前 store
+    // 使用 Object.assign 而不是直接赋值，以保持响应性
+    Object.keys(nestedModules).forEach((key) => {
+      Object.defineProperty(currentStore, key, {
+        get() {
+          return nestedModules[key]
+        },
+        enumerable: true,
+        configurable: true
+      })
+    })
+  }
+  
+  return currentStore
+}
+
+/**
  * 创建多模块状态管理 store
- * 将多个独立的 store 模块组合成一个全局 store
+ * 将多个独立的 store 模块组合成一个全局 store，支持嵌套模块
  * @template T - 全局状态类型，包含所有模块的类型定义
  * @param options - 各个模块的配置对象，键为模块名，值为模块的状态选项
- * @param globalOptions - 全局配置选项，如插件
+ * @param globalOptions - 全局配置选项，如插件和中间件
  * @returns 返回包含所有模块的 store 对象
  */
 export const createStore = <T extends { [K in keyof T]: T[K] }>(
@@ -48,31 +116,19 @@ export const createStore = <T extends { [K in keyof T]: T[K] }>(
 ) => {
   // 创建空的 store 对象
   const store = Object.create(null)
-  // 遍历所有模块配置
+  
+  // 遍历所有顶层模块配置
   Object.keys(options).forEach((key) => {
     if (!(key in store)) {
-      // 为每个模块创建独立的 store
-      const storeOptions = { ...options[key as keyof T] }
-      
-      // 合并全局插件
-      if (globalOptions?.plugins) {
-        storeOptions.plugins = [
-          ...(globalOptions.plugins || []),
-          ...(storeOptions.plugins || [])
-        ]
-      }
-      
-      // 合并全局中间件
-      if (globalOptions?.middleware) {
-        storeOptions.middleware = [
-          ...(globalOptions.middleware || []),
-          ...(storeOptions.middleware || [])
-        ]
-      }
-      
-      store[key] = defineStore(storeOptions)
+      // 为每个模块创建独立的 store（支持嵌套）
+      store[key] = createNestedStore(
+        options[key as keyof T],
+        globalOptions,
+        key
+      )
     }
   })
+  
   // 返回类型化的 store 对象
   return store as {
     [key: string]: ReturnType<typeof defineStore>

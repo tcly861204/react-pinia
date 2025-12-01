@@ -42,6 +42,14 @@ export type Actions<T> = T extends { actions: infer G } ? G : {}
 export type ActionFunction<S> = (this: S, ...args: any[]) => any | Promise<any>
 
 /**
+ * 嵌套模块配置类型
+ * 用于定义模块的子模块结构
+ */
+export type NestedModules = {
+  [K: string]: StateOption<any>
+}
+
+/**
  * 状态选项接口
  * 定义创建 store 时的配置选项
  * @template T - 状态类型
@@ -67,6 +75,10 @@ export interface StateOption<T> {
   plugins?: PiniaPlugin[]
   // 中间件列表（可选）
   middleware?: Middleware<T>[]
+  // 嵌套子模块（可选）
+  modules?: NestedModules
+  // 是否使用命名空间（可选）
+  namespaced?: boolean
 }
 
 export * from './plugin'
