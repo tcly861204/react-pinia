@@ -30,6 +30,7 @@ export default defineConfig({
           { text: '插件系统', link: '/plugin-guide' },
           { text: '中间件系统', link: '/middleware-guide' },
           { text: '模块化', link: '/modules-guide' },
+          { text: '订阅机制', link: '/subscription-guide' },
         ],
       },
       {

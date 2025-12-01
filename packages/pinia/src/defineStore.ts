@@ -7,6 +7,7 @@ import { Dep } from './dep'
 import { getStorage, setStorage } from './storage'
 import { setupDevTools, DevToolsInstance } from './devtools'
 import { composeMiddleware, ActionCall } from './middleware'
+import { StateSubscription, ActionSubscription, Unsubscribe, Mutation, ActionInfo } from './subscription'
 
 /**
  * Getter 缓存接口
@@ -38,8 +39,39 @@ export function defineStore<T>(options: StateOption<T>) {
   // Getter 缓存存储：存储每个 getter 的缓存信息
   const getterCaches = new Map<string, GetterCache>()
   
+  // 订阅者列表
+  const stateSubscriptions: StateSubscription<T>[] = []
+  const actionSubscriptions: ActionSubscription[] = []
+  
+  // 状态快照，用于追踪变化
+  const stateSnapshot = new Map<string, any>()
+  
   // 状态变化回调函数，传递变化的键
   const callback = (key: string) => {
+    // 获取旧值和新值
+    const oldValue = stateSnapshot.get(key)
+    const newValue = (proxyState as any)[key]
+    
+    // 更新快照
+    stateSnapshot.set(key, newValue)
+    
+    // 通知状态订阅者
+    if (stateSubscriptions.length > 0) {
+      const mutation: Mutation<T> = {
+        type: 'mutation',
+        key: key as keyof State<T>,
+        oldValue,
+        newValue
+      }
+      stateSubscriptions.forEach(fn => {
+        try {
+          fn(mutation, proxyState)
+        } catch (error) {
+          console.error('订阅回调执行错误:', error)
+        }
+      })
+    }
+    
     bus.emit(uid, key)
   }
   // 创建响应式代理对象，监听状态变化
@@ -48,6 +80,11 @@ export function defineStore<T>(options: StateOption<T>) {
   const proxyState = observer(null, initState, callback, true, proxyMap, rawMap)
   // 创建 store 对象，继承自代理状态
   const _store = Object.create(proxyState)
+  
+  // 初始化状态快照
+  Object.keys(initState).forEach(key => {
+    stateSnapshot.set(key, (initState as any)[key])
+  })
 
   // 状态恢复函数(用于时间旅行调试)
   const restoreState = (newState: any) => {
@@ -112,6 +149,22 @@ export function defineStore<T>(options: StateOption<T>) {
       
       // 包装 action 以支持 DevTools 追踪和中间件
       _store[key] = function(this: any, ...args: any[]) {
+        // 通知 action 订阅者（执行前）
+        if (actionSubscriptions.length > 0) {
+          const actionInfo: ActionInfo = {
+            name: key,
+            args,
+            timestamp: Date.now()
+          }
+          actionSubscriptions.forEach(fn => {
+            try {
+              fn(actionInfo, proxyState)
+            } catch (error) {
+              console.error('Action 订阅回调执行错误:', error)
+            }
+          })
+        }
+        
         // 通知 DevTools action 开始执行
         devtools?.send(
           { type: `Action: ${key}`, payload: { args } },
@@ -293,6 +346,36 @@ export function defineStore<T>(options: StateOption<T>) {
    */
   useHooks.get = function () {
     return proxyState
+  }
+  
+  /**
+   * 订阅状态变化
+   * @param fn - 订阅回调函数
+   * @returns 取消订阅函数
+   */
+  useHooks.subscribe = function (fn: StateSubscription<T>): Unsubscribe {
+    stateSubscriptions.push(fn)
+    return () => {
+      const index = stateSubscriptions.indexOf(fn)
+      if (index > -1) {
+        stateSubscriptions.splice(index, 1)
+      }
+    }
+  }
+  
+  /**
+   * 订阅 action 调用
+   * @param fn - 订阅回调函数
+   * @returns 取消订阅函数
+   */
+  useHooks.subscribeAction = function (fn: ActionSubscription): Unsubscribe {
+    actionSubscriptions.push(fn)
+    return () => {
+      const index = actionSubscriptions.indexOf(fn)
+      if (index > -1) {
+        actionSubscriptions.splice(index, 1)
+      }
+    }
   }
   
   // 暴露内部 store 对象用于测试和插件访问

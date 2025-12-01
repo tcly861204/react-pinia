@@ -11,3 +11,11 @@ export type { DevToolsOptions } from './types'
 // 导出 Middleware 相关类型和工具
 export { composeMiddleware } from './middleware'
 export type { Middleware, MiddlewareContext, ActionCall } from './middleware'
+// 导出订阅相关类型
+export type { 
+  StateSubscription, 
+  ActionSubscription, 
+  Unsubscribe, 
+  Mutation, 
+  ActionInfo 
+} from './subscription'
