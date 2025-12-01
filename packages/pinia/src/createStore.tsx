@@ -41,7 +41,10 @@ export const Provider = ({ store, children }: ProviderProps): JSX.Element => {
  */
 export const createStore = <T extends { [K in keyof T]: T[K] }>(
   options: { [K in keyof T]: StateOption<T[K]> },
-  globalOptions?: { plugins?: import('./plugin').PiniaPlugin[] }
+  globalOptions?: { 
+    plugins?: import('./plugin').PiniaPlugin[]
+    middleware?: import('./middleware').Middleware<any>[]
+  }
 ) => {
   // 创建空的 store 对象
   const store = Object.create(null)
@@ -56,6 +59,14 @@ export const createStore = <T extends { [K in keyof T]: T[K] }>(
         storeOptions.plugins = [
           ...(globalOptions.plugins || []),
           ...(storeOptions.plugins || [])
+        ]
+      }
+      
+      // 合并全局中间件
+      if (globalOptions?.middleware) {
+        storeOptions.middleware = [
+          ...(globalOptions.middleware || []),
+          ...(storeOptions.middleware || [])
         ]
       }
       

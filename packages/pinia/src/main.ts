@@ -8,3 +8,6 @@ export * from './version'
 export { setupDevTools } from './devtools'
 export type { DevToolsInstance } from './devtools'
 export type { DevToolsOptions } from './types'
+// 导出 Middleware 相关类型和工具
+export { composeMiddleware } from './middleware'
+export type { Middleware, MiddlewareContext, ActionCall } from './middleware'

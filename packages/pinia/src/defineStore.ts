@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react'
 import { Dep } from './dep'
 import { getStorage, setStorage } from './storage'
 import { setupDevTools, DevToolsInstance } from './devtools'
+import { composeMiddleware, ActionCall } from './middleware'
 
 /**
  * Getter 缓存接口
@@ -86,12 +87,30 @@ export function defineStore<T>(options: StateOption<T>) {
     })
   }
   
+  
+  // 准备中间件
+  let middlewareChain: ((action: ActionCall) => any) | null = null
+  if (options.middleware && options.middleware.length > 0) {
+    const composedMiddleware = composeMiddleware(options.middleware)
+    const context = {
+      store: _store,
+      getState: () => proxyState,
+      options
+    }
+    // 创建中间件链，最终调用实际的 action
+    middlewareChain = composedMiddleware(context)((action: ActionCall) => {
+      // 这是中间件链的终点，执行实际的 action
+      const actualAction = options.actions![action.name]
+      return actualAction.apply(proxyState, action.args)
+    })
+  }
+  
   // 绑定 actions 到 store 对象
   if (options.actions) {
     Object.keys(options.actions).forEach((key: string) => {
       const originalAction = options.actions![key]
       
-      // 包装 action 以支持 DevTools 追踪
+      // 包装 action 以支持 DevTools 追踪和中间件
       _store[key] = function(this: any, ...args: any[]) {
         // 通知 DevTools action 开始执行
         devtools?.send(
@@ -100,7 +119,10 @@ export function defineStore<T>(options: StateOption<T>) {
         )
         
         try {
-          const result = originalAction.apply(this, args)
+          // 如果有中间件，通过中间件链执行
+          const result = middlewareChain 
+            ? middlewareChain({ name: key, args })
+            : originalAction.apply(this, args)
           
           // 处理异步 action
           if (result instanceof Promise) {

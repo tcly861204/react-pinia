@@ -1,4 +1,6 @@
 import { PiniaPlugin } from './plugin'
+import { Middleware } from './middleware'
+
 
 // 存储类型常量数组，支持 localStorage 和 sessionStorage
 const storageType = ['localStorage', 'sessionStorage']
@@ -63,6 +65,8 @@ export interface StateOption<T> {
   devtools?: boolean | DevToolsOptions
   // 插件列表（可选）
   plugins?: PiniaPlugin[]
+  // 中间件列表（可选）
+  middleware?: Middleware<T>[]
 }
 
 export * from './plugin'
