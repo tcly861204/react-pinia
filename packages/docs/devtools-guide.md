@@ -353,10 +353,10 @@ const useStore = defineStore({
 
 ## 示例项目
 
-完整的示例项目请参考：[examples/devtools-demo](../example)
+完整的示例项目请参考：[examples/devtools-demo](./examples.md)
 
 ## 相关资源
 
 - [Redux DevTools Extension 文档](https://github.com/reduxjs/redux-devtools)
-- [React-Pinia API 文档](./api-reference.md)
-- [最佳实践指南](./best-practices.md)
+- [React-Pinia API 文档](./api.md)
+- [使用文档](./docs.md)

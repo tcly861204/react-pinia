@@ -26,6 +26,8 @@ export default defineConfig({
           { text: '快速开始', link: '/quick-start' },
           { text: '使用文档', link: '/docs' },
           { text: '示例代码', link: '/examples' },
+          { text: '调试工具', link: '/devtools-guide' },
+          { text: '插件系统', link: '/plugin-guide' },
         ],
       },
       {
