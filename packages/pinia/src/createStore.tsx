@@ -36,18 +36,30 @@ export const Provider = ({ store, children }: ProviderProps): JSX.Element => {
  * 将多个独立的 store 模块组合成一个全局 store
  * @template T - 全局状态类型，包含所有模块的类型定义
  * @param options - 各个模块的配置对象，键为模块名，值为模块的状态选项
+ * @param globalOptions - 全局配置选项，如插件
  * @returns 返回包含所有模块的 store 对象
  */
-export const createStore = <T extends { [K in keyof T]: T[K] }>(options: {
-  [K in keyof T]: StateOption<T[K]>
-}) => {
+export const createStore = <T extends { [K in keyof T]: T[K] }>(
+  options: { [K in keyof T]: StateOption<T[K]> },
+  globalOptions?: { plugins?: import('./plugin').PiniaPlugin[] }
+) => {
   // 创建空的 store 对象
   const store = Object.create(null)
   // 遍历所有模块配置
   Object.keys(options).forEach((key) => {
     if (!(key in store)) {
       // 为每个模块创建独立的 store
-      store[key] = defineStore(options[key as keyof T])
+      const storeOptions = { ...options[key as keyof T] }
+      
+      // 合并全局插件
+      if (globalOptions?.plugins) {
+        storeOptions.plugins = [
+          ...(globalOptions.plugins || []),
+          ...(storeOptions.plugins || [])
+        ]
+      }
+      
+      store[key] = defineStore(storeOptions)
     }
   })
   // 返回类型化的 store 对象

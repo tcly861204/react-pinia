@@ -64,6 +64,27 @@ export function defineStore<T>(options: StateOption<T>) {
       devtools.send({ type: `Mutation: ${key}`, payload: { key, value: (proxyState as any)[key] } }, proxyState)
     })
   }
+
+  // 执行插件
+  if (options.plugins) {
+    options.plugins.forEach((plugin) => {
+      const pluginContext = {
+        store: _store,
+        options,
+        pinia: {
+          install: () => {},
+          use: () => ({}) as any,
+          _s: new Map([['current', _store]]) // Expose current store in _s
+        }
+      }
+      
+      if (typeof plugin === 'function') {
+        plugin(pluginContext)
+      } else if (typeof plugin === 'object' && typeof plugin.install === 'function') {
+        plugin.install(pluginContext)
+      }
+    })
+  }
   
   // 绑定 actions 到 store 对象
   if (options.actions) {
@@ -251,6 +272,9 @@ export function defineStore<T>(options: StateOption<T>) {
   useHooks.get = function () {
     return proxyState
   }
+  
+  // 暴露内部 store 对象用于测试和插件访问
+  useHooks._store = _store
   
   return useHooks
 }

@@ -1,3 +1,5 @@
+import { PiniaPlugin } from './plugin'
+
 // 存储类型常量数组，支持 localStorage 和 sessionStorage
 const storageType = ['localStorage', 'sessionStorage']
 
@@ -59,7 +61,11 @@ export interface StateOption<T> {
   deep?: boolean
   // DevTools 配置（可选）
   devtools?: boolean | DevToolsOptions
+  // 插件列表（可选）
+  plugins?: PiniaPlugin[]
 }
+
+export * from './plugin'
 
 /**
  * DevTools 配置选项
