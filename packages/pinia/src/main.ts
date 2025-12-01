@@ -19,3 +19,6 @@ export type {
   Mutation, 
   ActionInfo 
 } from './subscription'
+// 导出测试工具
+export { createTestStore } from './testing'
+export type { TestStore } from './testing'
